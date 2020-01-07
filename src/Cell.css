@@ -1,0 +1,47 @@
+.Cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border: 1px solid black;
+}
+
+.CellX--0 {
+  left: 0;
+}
+.CellX--1 {
+  left: 40px;
+}
+.CellX--2 {
+  left: 80px;
+}
+.CellX--3 {
+  left: 120px;
+}
+.CellY--0 {
+  bottom: 0;
+}
+.CellY--1 {
+  bottom: 40px;
+}
+.CellY--2 {
+  bottom: 80px;
+}
+.CellY--3 {
+  bottom: 120px;
+}
+
+.Zone--1 .Cell {
+  background-color: yellow;
+}
+.Zone--2 .Cell {
+  background-color: green;
+}
+.Zone--3 .Cell {
+  background-color: blue;
+}
+.Zone--4 .Cell {
+  background-color: purple;
+}

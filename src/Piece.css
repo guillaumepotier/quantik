@@ -1,0 +1,44 @@
+.Piece--square {
+  height: 30px;
+  width: 30px;
+  border: 1px solid #ccc;
+}
+
+.Piece--triangle {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 15px 26px 15px;
+  border-color: transparent transparent #ccc transparent;
+}
+
+.Piece--triangle.Piece--black {
+  border-color: transparent transparent black transparent;
+}
+
+.Piece--circle {
+  height: 30px;
+  width: 30px;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+}
+
+.Piece--cross {
+  width: 30px;
+  height: 30px;
+  background: linear-gradient(to bottom, transparent 35%, #ccc 35%, #ccc 65%,  transparent 65%),
+    linear-gradient(to right, transparent 35%, #ccc 35%, #ccc 65%, transparent 65%);
+}
+
+.Piece--cross.Piece--black {
+  background: linear-gradient(to bottom, transparent 35%, black 35%, black 65%,  transparent 65%),
+    linear-gradient(to right, transparent 35%, black 35%, black 65%, transparent 65%);
+}
+
+.Piece--white:not(.Piece--triangle):not(.Piece--cross) {
+  background: #ccc;
+}
+
+.Piece--black:not(.Piece--triangle):not(.Piece--cross) {
+  background: black;
+}
