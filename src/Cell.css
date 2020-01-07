@@ -34,14 +34,15 @@
 }
 
 .Zone--1 .Cell {
-  background-color: yellow;
-}
-.Zone--2 .Cell {
-  background-color: green;
-}
-.Zone--3 .Cell {
-  background-color: blue;
+  background-color: #FFFFCC;
 }
 .Zone--4 .Cell {
-  background-color: purple;
+  background-color: #FFFF99;
 }
+.Zone--2 .Cell {
+  background-color: #CCFF99;
+}
+.Zone--3 .Cell {
+  background-color: #CCFFCC;
+}
+
