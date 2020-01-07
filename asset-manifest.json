@@ -1,0 +1,22 @@
+{
+  "files": {
+    "main.css": "/quantik/static/css/main.49661e28.chunk.css",
+    "main.js": "/quantik/static/js/main.34e6d764.chunk.js",
+    "main.js.map": "/quantik/static/js/main.34e6d764.chunk.js.map",
+    "runtime-main.js": "/quantik/static/js/runtime-main.f42968d3.js",
+    "runtime-main.js.map": "/quantik/static/js/runtime-main.f42968d3.js.map",
+    "static/js/2.0d69cb38.chunk.js": "/quantik/static/js/2.0d69cb38.chunk.js",
+    "static/js/2.0d69cb38.chunk.js.map": "/quantik/static/js/2.0d69cb38.chunk.js.map",
+    "index.html": "/quantik/index.html",
+    "precache-manifest.a543f7ce39bb0a95be0688e3cc56d66d.js": "/quantik/precache-manifest.a543f7ce39bb0a95be0688e3cc56d66d.js",
+    "service-worker.js": "/quantik/service-worker.js",
+    "static/css/main.49661e28.chunk.css.map": "/quantik/static/css/main.49661e28.chunk.css.map",
+    "static/js/2.0d69cb38.chunk.js.LICENSE": "/quantik/static/js/2.0d69cb38.chunk.js.LICENSE"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.f42968d3.js",
+    "static/js/2.0d69cb38.chunk.js",
+    "static/css/main.49661e28.chunk.css",
+    "static/js/main.34e6d764.chunk.js"
+  ]
+}
