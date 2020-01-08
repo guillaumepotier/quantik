@@ -1,6 +1,13 @@
+.Game {
+  display: flex;
+}
+
 .Board {
   position: relative;
-  width: 160px;
-  height: 160px;
-  border: 1px solid black;
+  width: 240px;
+  height: 240px;
+}
+
+.Controls {
+  margin-left: 15px;
 }

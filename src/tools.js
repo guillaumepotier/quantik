@@ -1,5 +1,7 @@
 import intersection from 'lodash/intersection';
 
+import Player from './Player'
+
 export const isPieceAllowed = (board, x, y, piece, color) => {
   let i, j;
 
@@ -65,7 +67,7 @@ export const hasWon = board => {
   }
 
   // test zones
-  for (let z = 0; z <= 3; z++) {
+  for (let z = 1; z <= 4; z++) {
     let zone = [];
 
     for (i = 0; i <= 3; i++)
@@ -79,3 +81,37 @@ export const hasWon = board => {
 
   return false;
 }
+
+export const cloneBoard = board => {
+  return [
+    board[0].slice(),
+    board[1].slice(),
+    board[2].slice(),
+    board[3].slice()
+  ]
+}
+
+export const clonePlayer = player => {
+  const newPlayer = new Player(player.color);
+  newPlayer.pieces = player.pieces.slice();
+
+  return newPlayer;
+}
+
+export const removePlayerPiece = (player, piece) => {
+  let index;
+
+  for (let i = 0; i < player.pieces.length; i++) {
+    if (player.pieces[i] === piece) {
+      index = i;
+      break;
+    }
+  }
+
+  player.pieces.splice(index, 1);
+}
+
+export const doMove = (board, player, piece, x, y) => {
+  board[x][y] = { piece, color: player.color };
+  removePlayerPiece(player, piece);
+};

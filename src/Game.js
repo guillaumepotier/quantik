@@ -8,10 +8,17 @@ import Player from './Player';
 
 import {
   hasWon,
+  doMove,
   isPieceAllowed
 } from './tools';
 
+import {
+  play
+} from './ia'
+
 import './Game.css';
+
+const IA_DEPTH = 0;
 
 export const getDefaultState = () => ({
   board: [
@@ -25,18 +32,22 @@ export const getDefaultState = () => ({
     new Player('black')
   ],
   turn: 0,
-  choose: false
+  choose: false,
+  needRestart: false
 });
 
 class Game extends React.Component {
   constructor (args) {
     super(args);
 
-    this.state = getDefaultState();
+    this.state = {
+      ...getDefaultState(),
+      withIA: true
+    }
   }
 
   onCellClick (x, y) {
-    if (this.state.board[x][y])
+    if (this.state.board[x][y] || this.state.needRestart)
       return;
 
     this.setState({ choose: {x, y} });
@@ -47,12 +58,12 @@ class Game extends React.Component {
     const { x, y } = choose;
     let currentPlayer = players[turn%2];
 
-    board[x][y] = { piece, color: currentPlayer.color };
-    currentPlayer.pieces.splice(i, 1);
+    doMove(board, currentPlayer, piece, x, y);
 
     if (hasWon(board)) {
       alert(`Congrats player ${currentPlayer.color}!`);
-      this.setState(getDefaultState());
+      // this.setState(getDefaultState());
+      this.setState({ needRestart: true, choose: false });
       return;
     }
 
@@ -60,6 +71,24 @@ class Game extends React.Component {
       board,
       turn: turn + 1,
       choose: false
+    }, () => {
+      if (this.state.withIA) {
+        this.IAPlay();
+      }
+    });
+  }
+
+  IAPlay () {
+    const newState = play(this.state, IA_DEPTH);
+
+    this.setState({
+      ...newState,
+      turn: this.state.turn + 1
+    }, () => {
+      if (hasWon(this.state.board)) {
+        alert(`Congrats IA!`);
+        this.setState({ needRestart: true, choose: false });
+      }
     });
   }
 
@@ -104,7 +133,19 @@ class Game extends React.Component {
         </div>
 
         <div className="Controls">
-          Player {currentPlayer.color} turn
+          Player vs. Player<input type="radio" name="player2" value="IA" checked={!this.state.withIA} onClick={() => this.setState({ withIA: false })} />
+          Player vs. IA<input type="radio" name="player2" value="human" checked={this.state.withIA} onClick={() => this.setState({ withIA: true })} />
+          {!this.state.needRestart &&
+            <div>Player {currentPlayer.color} turn</div>
+          }
+
+          {this.state.needRestart &&
+            <button onClick={() => {
+              this.setState(getDefaultState());
+            }}>New game!</button>
+          }
+
+          <div>--</div>
 
           <div className="Choice">
             {choose &&
