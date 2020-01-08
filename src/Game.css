@@ -1,3 +1,25 @@
+@media only screen and (max-width: 400px) {
+  .Game {
+    flex-direction: column;
+  }
+
+  .Board {
+    margin: 15px auto;
+  }
+}
+
+@media only screen and (min-width: 400px) {
+  .Game {
+    flex-direction: row;
+  }
+
+  .Controls,
+  .Board {
+    margin-top: 20px;
+    margin-left: 20px;
+  }
+}
+
 .Game {
   display: flex;
 }

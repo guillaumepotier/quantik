@@ -133,8 +133,8 @@ class Game extends React.Component {
         </div>
 
         <div className="Controls">
-          Player vs. Player<input type="radio" name="player2" value="IA" checked={!this.state.withIA} onClick={() => this.setState({ withIA: false })} />
-          Player vs. IA<input type="radio" name="player2" value="human" checked={this.state.withIA} onClick={() => this.setState({ withIA: true })} />
+          Player vs. Player<input type="radio" name="player2" value="IA" checked={!this.state.withIA} onChange={() => this.setState({ withIA: false })} />
+          Player vs. IA<input type="radio" name="player2" value="human" checked={this.state.withIA} onChange={() => this.setState({ withIA: true })} />
           {!this.state.needRestart &&
             <div>Player {currentPlayer.color} turn</div>
           }
