@@ -13,12 +13,12 @@ import {
 } from './tools';
 
 import {
-  play
+  playv2
 } from './ia'
 
 import './Game.css';
 
-const IA_DEPTH = 0;
+const IA_DEPTH = 2;
 
 export const getDefaultState = () => ({
   board: [
@@ -79,7 +79,11 @@ class Game extends React.Component {
   }
 
   IAPlay () {
-    const newState = play(this.state, IA_DEPTH);
+    const start = new Date();
+    const newState = playv2(this.state, IA_DEPTH);
+    const end = new Date();
+
+    console.log(`IA took ${end-start}ms to play`);
 
     this.setState({
       ...newState,
