@@ -203,15 +203,15 @@ test('playv2', () => {
 });
 
 test('playv2 debug', () => {
-  const board = [
+  let board = [
     [false, false, false, false],
     [false, false, false, false],
     [false, false, false, false],
     [false, false, false, false]
   ];
-  const white = new Player('white');
-  const black = new Player('black');
-  const players = [ white, black ];
+  let white = new Player('white');
+  let black = new Player('black');
+  let players = [ white, black ];
 
   doMove(board, white, 'triangle', 2, 0);
   doMove(board, black, 'circle', 2, 1);
@@ -228,7 +228,6 @@ test('playv2 debug', () => {
   ---------
   | | | | |
   */
-
 
   // const clone2 = cloneBoard(board);
 
@@ -248,4 +247,65 @@ test('playv2 debug', () => {
 
   let debug = playv2({ board, players }, 1, true);
   console.log('>> debug', debug);
+
+  /*
+  | | | |●|
+  ---------
+  | |△| | |
+  ---------
+  |▲|○| | |
+  ---------
+  | | | |◇|
+  */
+  // board = [
+  //   [false, false, false, false],
+  //   [false, false, false, false],
+  //   [false, false, false, false],
+  //   [false, false, false, false]
+  // ];
+  // white = new Player('white');
+  // black = new Player('black');
+  // players = [ white, black ];
+
+  // doMove(board, white, 'circle', 2, 1);
+  // doMove(board, black, 'triangle', 2, 0);
+  // doMove(board, white, 'triangle', 1, 1);
+  // doMove(board, black, 'circle', 0, 3);
+  // doMove(board, white, 'cross', 3, 3);
+
+  // console.log('board2', board);
+  // // debug = playv2({ board, players }, 4, true);
+  // doMove(board, black, 'square', 1, 0);
+
+  // debug = playv2({ board, players }, 4, true);
+  // console.log('>> debug2', debug);
+
+  /*
+  | |◆| | |
+  ---------
+  | |△| | |
+  ---------
+  | |○| |▲|
+  ---------
+  |◇| | |◼︎|
+  */
+  board = [
+    [false, false, false, false],
+    [false, false, false, false],
+    [false, false, false, false],
+    [false, false, false, false]
+  ];
+  white = new Player('white');
+  black = new Player('black');
+  players = [ white, black ];
+
+  doMove(board, white, 'cross', 0, 1);
+  doMove(board, black, 'triangle', 1, 1);
+  doMove(board, black, 'circle', 2, 1);
+  doMove(board, white, 'triangle', 2, 3);
+  doMove(board, black, 'cross', 3, 0);
+  doMove(board, white, 'square', 3, 3);
+
+  debug = playv2({ board, players }, 5, true);
+  console.log('>> debug2', debug);
 });

@@ -17,7 +17,9 @@ import {
 
 import './Game.css';
 
-const IA_DEPTH = 3;
+const IA_DEPTH_HARD = 5;
+const IA_DEPTH_MEDIUM = 3;
+const IA_DEPTH_EASY = 2;
 
 export const getDefaultState = () => ({
   board: [
@@ -32,6 +34,7 @@ export const getDefaultState = () => ({
   ],
   turn: 0,
   choose: false,
+  iaComputing: false,
   needRestart: false
 });
 
@@ -41,7 +44,8 @@ class Game extends React.Component {
 
     this.state = {
       ...getDefaultState(),
-      withIA: true
+      withIA: true,
+      iaLevel: IA_DEPTH_MEDIUM
     }
   }
 
@@ -72,21 +76,23 @@ class Game extends React.Component {
       choose: false
     }, () => {
       if (this.state.withIA) {
-        this.IAPlay();
+        this.setState({ iaComputing: true });
+        setTimeout(() => this.IAPlay(), 300);
       }
     });
   }
 
   IAPlay () {
     const start = new Date();
-    const newState = playv2(this.state, IA_DEPTH);
+    const newState = playv2(this.state, this.state.iaLevel);
     const end = new Date();
 
     console.log(`IA took ${end-start}ms to play`);
 
     this.setState({
       ...newState,
-      turn: this.state.turn + 1
+      turn: this.state.turn + 1,
+      iaComputing: false
     }, () => {
       if (hasWon(this.state.board)) {
         alert(`Congrats IA!`);
@@ -120,8 +126,21 @@ class Game extends React.Component {
         </div>
 
         <div className="Controls">
-          Player vs. Player<input type="radio" name="player2" value="IA" checked={!this.state.withIA} onChange={() => this.setState({ withIA: false })} />
-          Player vs. IA<input type="radio" name="player2" value="human" checked={this.state.withIA} onChange={() => this.setState({ withIA: true })} />
+          <div className="HumanOrIa">
+            Player vs. Player<input type="radio" name="player2" value="IA" checked={!this.state.withIA} onChange={() => this.setState({ withIA: false })} />
+            Player vs. IA<input type="radio" name="player2" value="human" checked={this.state.withIA} onChange={() => this.setState({ withIA: true })} />
+          </div>
+          {this.state.withIA &&
+            <div className="IALevel">
+              <label htmlFor="ia_level">IA Difficulty</label>
+              <select id="ia_level" name="ia_level" value={this.state.iaLevel} onChange={event => this.setState({ iaLevel: parseInt(event.target.value, 10) }) }>
+                <option value={IA_DEPTH_EASY}>Easy</option>
+                <option value={IA_DEPTH_MEDIUM}>Medium</option>
+                <option value={IA_DEPTH_HARD}>Hard</option>
+              </select>
+            </div>
+          }
+
           {!this.state.needRestart &&
             <div>Player {currentPlayer.color} turn</div>
           }
@@ -133,6 +152,10 @@ class Game extends React.Component {
           }
 
           <div>--</div>
+
+          {this.state.iaComputing &&
+            <div>IA is computing..</div>
+          }
 
           <div className="Choice">
             {choose &&

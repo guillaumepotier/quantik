@@ -73,9 +73,9 @@ export const playv2 = (state, depth, debug) => {
   // first move is not important, do not make many iterations
   if (state.players[1].pieces.length === 8)
     depth = 0;
-  // for second move, reduce depth by one cuz not very important too
-  // if (state.players[1].pieces.length === 7 && depth > 0)
-  //   depth--;
+  // for second move, reduce depth by half not very important too
+  if (state.players[1].pieces.length === 7 && depth > 0)
+    depth = Math.round(depth/2);
 
   for (let i = 0; i < situations.length; i++) {
     const situation = situations[i];
@@ -92,8 +92,10 @@ export const playv2 = (state, depth, debug) => {
 
   doMove(state.board, state.players[1], bestSituation.piece, bestSituation.x, bestSituation.y);
 
-  if (debug)
+  if (debug) {
+    console.log('playv2 best situation', bestSituation.x, bestSituation.y, bestSituation.piece, best);
     return debugBoard;
+  }
 
   return state;
 }
