@@ -33,15 +33,15 @@
   top: 180px;
 }
 
-.CellZone--1 {
+.CellZone--0 {
   background-color: #FFFFCC;
 }
-.CellZone--2 {
+.CellZone--1 {
   background-color: #CCFF99;
 }
-.CellZone--3 {
+.CellZone--2 {
   background-color: #CCFFCC;
 }
-.CellZone--4 {
+.CellZone--3 {
   background-color: #FFFF99;
 }

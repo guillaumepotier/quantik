@@ -15,6 +15,7 @@ import {
 
 import {
   hasWon,
+  hasWonOld,
   removePlayerPiece,
   doMove,
   cloneBoard
@@ -202,7 +203,7 @@ test('playv2', () => {
   // console.log(state.board);
 });
 
-test('playv2 debug', () => {
+test.skip('playv2 debug', () => {
   let board = [
     [false, false, false, false],
     [false, false, false, false],
@@ -308,4 +309,26 @@ test('playv2 debug', () => {
 
   debug = playv2({ board, players }, 5, true);
   console.log('>> debug2', debug);
+});
+
+test('hasWon perf', () => {
+  let start, stop;
+  const board = [
+    [{ piece: 'square', color: 'white' }, { piece: 'circle', color: 'white' }, false, false],
+    [{ piece: 'triangle', color: 'black' }, { piece: 'cross', color: 'black' }, false, false],
+    [false, false, false, false],
+    [false, false, false, false]
+  ];
+  start = new Date();
+  for (let i = 0; i <= 10000; i++)
+    hasWon(board);
+  stop = new Date();
+  console.log(`hasWon took ${stop-start}ms to execute`);
+
+  start = new Date();
+  for (let i = 0; i <= 10000; i++)
+    hasWonOld(board);
+  stop = new Date();
+  console.log(`hasWonOld took ${stop-start}ms to execute`);
+
 });

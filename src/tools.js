@@ -29,18 +29,46 @@ export const isPieceAllowed = (board, x, y, piece, color) => {
 export const getZone = (x, y) => {
   if (x <= 1) {
     if (y <= 1)
+      return 0;
+    else
+      return 2;
+  } else {
+    if (y <= 1)
       return 1;
     else
       return 3;
-  } else {
-    if (y <= 1)
-      return 2;
-    else
-      return 4;
   }
 }
 
 export const hasWon = board => {
+  let i, j;
+  const rows = [[], [], [], []];
+  const cols = [[], [], [], []];
+  const zones = [[], [], [], []];
+  const needed = ['square', 'triangle', 'circle', 'cross'];
+
+  for (i = 0; i <= 3; i++) {
+    for (j = 0; j <= 3; j++) {
+      const piece = board[i][j].piece;
+      rows[i].push(piece);
+      cols[j].push(piece);
+      zones[getZone(i, j)].push(piece);
+    }
+  }
+
+  for (let k = 0; k <= 3; k++) {
+    if (intersection(rows[k], needed).length === 4)
+      return true;
+    if (intersection(cols[k], needed).length === 4)
+      return true;
+    if (intersection(zones[k], needed).length === 4)
+      return true;
+  }
+
+  return false;
+}
+
+export const hasWonOld = board => {
   let i, j;
   const needed = ['square', 'triangle', 'circle', 'cross'];
 
