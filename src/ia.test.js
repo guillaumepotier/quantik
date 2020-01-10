@@ -4,6 +4,7 @@ import {
   play,
   playv2,
   minmax,
+  minmaxv2,
   evaluate,
   WEIGHT,
   MALUS,
@@ -15,7 +16,8 @@ import {
 import {
   hasWon,
   removePlayerPiece,
-  doMove
+  doMove,
+  cloneBoard
 } from './tools'
 
 import Player from './Player';
@@ -74,7 +76,7 @@ test('evaluate non winning matches malus', () => {
   doMove(board, players[0], 'circle', 0, 2);
   doMove(board, players[1], 'triangle', 3, 3);
   // console.log(board, players[1].pieces);
-  expect(evaluate(board, players, true)).toBe(-MALUS);
+  expect(evaluate(board, players, true)).toBe(MALUS);
 });
 
 test('basic ia 0 depth', () => {
@@ -111,9 +113,15 @@ test('getAvailableSituations', () => {
   expect(getAvailableSituations(board, players, true).length).toBe(53);
 
   doMove(board, white, 'triangle', 0, 0);
-  expect(getAvailableSituations(board, players, false).length).toBe(42);
 
-  // console.log(getAvailableSituations(board, players, false)[0]);
+  const availableSituations = getAvailableSituations(board, players, false);
+  expect(availableSituations.length).toBe(42);
+  expect(availableSituations[0].players[0].pieces.length).toBe(5);
+
+  const availableSituationsWithTriangle = availableSituations.filter(({ piece }) => piece === 'triangle');
+  expect(availableSituationsWithTriangle.length).toBe(0);
+
+  // console.log('>>> availableSituations', getAvailableSituations(board, players, false)[0].players[0]);
 });
 
 test('maxMinmaxv2', () => {
@@ -132,7 +140,23 @@ test('maxMinmaxv2', () => {
   doMove(board, white, 'triangle', 0, 2);
 
   const availableSituations = getAvailableSituations(board, players, true);
+
+  // const cornerSituations = availableSituations.filter(({ x, y }) => x === 0 && y === 3);
+  // console.log('cornerSituations', cornerSituations);
+
+  // console.log('situation1', evaluate(cornerSituations[0].board, cornerSituations[0].players, true));
+  // console.log('situation2',evaluate(cornerSituations[1].board, cornerSituations[1].players, true));
+
+  // console.log('situation1.2', minmaxv2(cornerSituations[0].board, 0, cornerSituations[0].players, true));
+  // console.log('situation2.2', minmaxv2(cornerSituations[1].board, 0, cornerSituations[1].players, true));
+
+  // const maxBestCornerSituations = maxMinmaxv2(cornerSituations, 0, players, true);
+  // console.log('maxBestCornerSituations', maxBestCornerSituations.best, maxBestCornerSituations.bestSituation);
+
+
   const { best, bestSituation } = maxMinmaxv2(availableSituations, 0, players, true);
+
+  // console.log('>>> bestSituation', best, bestSituation)
 
   expect(best).toBe(WEIGHT-black.pieces.length+1);
   expect(bestSituation.x).toBe(0);
@@ -140,7 +164,7 @@ test('maxMinmaxv2', () => {
   expect(bestSituation.piece).toBe('cross');
 });
 
-test('minMinmaxv2', () => {
+test.skip('minMinmaxv2', () => {
   const board = [
     [false, false, false, false],
     [false, false, false, false],
@@ -175,8 +199,53 @@ test('playv2', () => {
   doMove(board, white, 'square', 0, 0);
 
   let state = playv2({ board, players }, 0);
-  console.log(state.board);
+  // console.log(state.board);
+});
 
-  state = playv2({ board, players }, 1);
-  console.log(state.board);
+test('playv2 debug', () => {
+  const board = [
+    [false, false, false, false],
+    [false, false, false, false],
+    [false, false, false, false],
+    [false, false, false, false]
+  ];
+  const white = new Player('white');
+  const black = new Player('black');
+  const players = [ white, black ];
+
+  doMove(board, white, 'triangle', 2, 0);
+  doMove(board, black, 'circle', 2, 1);
+  doMove(board, white, 'square', 0, 3);
+
+  console.log('>> board', board);
+
+  /*
+  | | | |◻︎|
+  ---------
+  | | | | |
+  ---------
+  |△|●| | |
+  ---------
+  | | | | |
+  */
+
+
+  // const clone2 = cloneBoard(board);
+
+  // console.log('>>>> cest parti');
+  // console.log(playv2({ board: clone2, players }, 1, true));
+  let availableSituations = getAvailableSituations(board, players, true);
+  // let circleSituation = availableSituations.find(({x, y, piece}) => {
+  //   return x === 2 && y === 2 && piece === 'circle';
+  // });
+  // let circleSituations = availableSituations.filter(({ piece }) => piece === 'circle');
+  // console.log('circleSituations length', circleSituations.length);
+
+  // for (let k = 0; k < circleSituations.length; k++)
+  //   console.log(`>> circleSituation #${k}`, circleSituations[k].players[1].pieces);
+
+  // console.log('circleSituation', circleSituation, circleSituation.players[0].pieces, circleSituation.players[1].pieces);
+
+  let debug = playv2({ board, players }, 1, true);
+  console.log('>> debug', debug);
 });

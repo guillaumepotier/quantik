@@ -115,3 +115,10 @@ export const doMove = (board, player, piece, x, y) => {
   board[x][y] = { piece, color: player.color };
   removePlayerPiece(player, piece);
 };
+
+
+window.doMove = doMove;
+window.players = [
+  new Player('white'),
+  new Player('black')
+];

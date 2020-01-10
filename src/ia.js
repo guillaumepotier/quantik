@@ -1,5 +1,4 @@
 import uniq from 'lodash/uniq';
-import lastIndexOf from 'lodash/lastIndexOf';
 
 import {
   cloneBoard,
@@ -12,12 +11,10 @@ import {
 export const WEIGHT = 1000;
 export const MALUS = 69;
 
+export const DEBUG = true;
+
 export const getAvailableSituations = (board, players, isIA) => {
   const situations = [];
-  const situationPlayers = [
-    clonePlayer(players[0]),
-    clonePlayer(players[1])
-  ];
   const currentPlayer = players[isIA ? 1 : 0];
   const pieces = uniq(currentPlayer.pieces);
 
@@ -33,18 +30,24 @@ export const getAvailableSituations = (board, players, isIA) => {
         if (!isPieceAllowed(board, i, j, piece, currentPlayer.color))
           continue;
 
+        const situationPlayers = [
+          clonePlayer(players[0]),
+          clonePlayer(players[1])
+        ];
+
         // clone situation.board and situation.player to modify them
         const situationBoard = cloneBoard(board);
-        situationPlayers[isIA ? 1 : 0] = clonePlayer(players[isIA ? 1 : 0]);
+        const situationPlayer = situationPlayers[isIA ? 1 : 0];
 
-        doMove(situationBoard, situationPlayers[isIA ? 1 : 0], piece, i, j);
+        doMove(situationBoard, situationPlayer, piece, i, j);
 
         situations.push({
           board: situationBoard,
           players: situationPlayers,
           x: i,
           y: j,
-          piece
+          piece,
+          color: situationPlayer.color
         });
       }
     }
@@ -53,22 +56,44 @@ export const getAvailableSituations = (board, players, isIA) => {
   return situations;
 }
 
-export const playv2 = (state, depth) => {
-  let best = 0;
+export const playv2 = (state, depth, debug) => {
+  let best = false;
   let bestSituation;
   const situations = getAvailableSituations(state.board, state.players, true);
+
+  if (DEBUG) {
+    var debugBoard = [
+      [{}, {}, {}, {}],
+      [{}, {}, {}, {}],
+      [{}, {}, {}, {}],
+      [{}, {}, {}, {}]
+    ];
+  }
+
+  // first move is not important, do not make many iterations
+  if (state.players[1].pieces.length === 8)
+    depth = 0;
+  // for second move, reduce depth by one cuz not very important too
+  // if (state.players[1].pieces.length === 7 && depth > 0)
+  //   depth--;
 
   for (let i = 0; i < situations.length; i++) {
     const situation = situations[i];
     const val = minmaxv2(situation.board, depth, situation.players, true);
 
-    if (val > best || (val === best && Math.random() < 0.1)) {
+    if (DEBUG)
+      debugBoard[situation.x][situation.y][situation.piece] = val;
+
+    if (best === false || val > best || (val === best && Math.random() < 0.1)) {
       best = val;
       bestSituation = situation;
     }
   }
 
   doMove(state.board, state.players[1], bestSituation.piece, bestSituation.x, bestSituation.y);
+
+  if (debug)
+    return debugBoard;
 
   return state;
 }
@@ -120,13 +145,14 @@ export const play = (state, depth) => {
 }
 
 export const maxMinmaxv2 = (situations, depth, players, isIA) => {
-  let best = 0;
+  let best = false;
   let bestSituation;
 
   for (let i = 0; i < situations.length; i++) {
     const currentSituation = situations[i];
     const value = minmaxv2(currentSituation.board, depth, currentSituation.players, isIA);
-    if (value > best || (value === best && Math.random() < 0.1)) {
+
+    if (best === false || value > best || (value === best && Math.random() < 0.1)) {
       best = value;
       bestSituation = currentSituation;
     }
@@ -136,13 +162,14 @@ export const maxMinmaxv2 = (situations, depth, players, isIA) => {
 }
 
 export const minMinmaxv2 = (situations, depth, players, isIA) => {
-  let best = 0;
+  let best = false;
   let bestSituation;
 
   for (let i = 0; i < situations.length; i++) {
     const currentSituation = situations[i];
     const value = minmaxv2(currentSituation.board, depth, currentSituation.players, isIA);
-    if (value < best || (value === best && Math.random() < 0.1)) {
+
+    if (best === false || value < best || (value === best && Math.random() < 0.1)) {
       best = value;
       bestSituation = currentSituation;
     }
@@ -157,13 +184,18 @@ export const minmaxv2 = (board, depth, players, isIA) => {
 
   // get next player situations
   // ie: if we're currently evaluating an ia move, consider player next situations
-  const situations = getAvailableSituations(board, players, isIA);
+  const situations = getAvailableSituations(board, players, !isIA);
+
+  // const { best, bestSituation } = maxMinmaxv2(situations, depth - 1, players, !isIA);
+  // return best;
 
   if (isIA) {
-    const { best, bestSituation } = maxMinmaxv2(situations, depth - 1, players, !isIA);
+    const { best, bestSituation } = minMinmaxv2(situations, depth - 1, players, false);
+    // console.log('>>>> isIA best', best, bestSituation)
     return best;
   } else {
-    const { best, bestSituation } = minMinmaxv2(situations, depth - 1, players, isIA);
+    const { best, bestSituation } = maxMinmaxv2(situations, depth - 1, players, true);
+    // console.log('isPlayer best', best, bestSituation)
     return best;
   }
 }
@@ -173,13 +205,15 @@ export const minmax = (board, depth, players, playerIA, isIA) => {
     return evaluate(board, players, isIA);
 }
 
+
+// todo: won't work, need to fake play turn to have proper player.pieces count
 export const evaluate = (board, players, isIA) => {
   const finished = hasWon(board);
   const player = players[isIA ? 1 : 0];
 
   if (!finished) {
     const malus = player.pieces.length >= 5 && uniq(player.pieces).length < 4;
-    return malus ? (isIA ? -MALUS : MALUS) : 100;
+    return (isIA ? 1 : -1) * (malus ? MALUS : 100);
   }
 
   if (isIA) {
@@ -188,3 +222,16 @@ export const evaluate = (board, players, isIA) => {
 
   return -WEIGHT + players[0].pieces.length;
 }
+
+window.board = [
+  [false, false, false, { piece: 'square', color: 'white' }],
+  [false, false, false, false],
+  [{ piece: 'triangle', color: 'white' }, { piece: 'circle', color: 'black' }, false, false],
+  [false, false, false, false]
+];
+window.evaluate = evaluate;
+window.playv2 = playv2;
+window.getAvailableSituations = getAvailableSituations;
+window.minmaxv2 = minmaxv2;
+window.maxMinmaxv2 = maxMinmaxv2;
+window.minMinmaxv2 = minMinmaxv2;

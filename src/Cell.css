@@ -8,41 +8,40 @@
   border: 1px solid black;
 }
 
-.CellX--0 {
+.CellY--0 {
   left: 0;
 }
-.CellX--1 {
+.CellY--1 {
   left: 60px;
 }
-.CellX--2 {
+.CellY--2 {
   left: 120px;
 }
-.CellX--3 {
+.CellY--3 {
   left: 180px;
 }
-.CellY--0 {
-  bottom: 0;
+.CellX--0 {
+  top: 0;
 }
-.CellY--1 {
-  bottom: 60px;
+.CellX--1 {
+  top: 60px;
 }
-.CellY--2 {
-  bottom: 120px;
+.CellX--2 {
+  top: 120px;
 }
-.CellY--3 {
-  bottom: 180px;
+.CellX--3 {
+  top: 180px;
 }
 
-.Zone--1 .Cell {
+.CellZone--1 {
   background-color: #FFFFCC;
 }
-.Zone--4 .Cell {
-  background-color: #FFFF99;
-}
-.Zone--2 .Cell {
+.CellZone--2 {
   background-color: #CCFF99;
 }
-.Zone--3 .Cell {
+.CellZone--3 {
   background-color: #CCFFCC;
 }
-
+.CellZone--4 {
+  background-color: #FFFF99;
+}

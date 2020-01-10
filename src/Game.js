@@ -1,7 +1,6 @@
 import React from 'react';
 
 import Cell from './Cell';
-import Zone from './Zone';
 import Piece from './Piece';
 
 import Player from './Player';
@@ -18,7 +17,7 @@ import {
 
 import './Game.css';
 
-const IA_DEPTH = 2;
+const IA_DEPTH = 3;
 
 export const getDefaultState = () => ({
   board: [
@@ -96,6 +95,16 @@ class Game extends React.Component {
     });
   }
 
+  renderGrid (board) {
+    const cells = [];
+
+    for (let i = 0; i <= 3; i++)
+      for (let j = 0; j <= 3; j++)
+        cells.push(<Cell key={`${i}:${j}`} x={i} y={j} board={board} onCellClick={() => this.onCellClick(i, j)} />)
+
+    return cells;
+  }
+
   render () {
     const { board, players, turn, choose } = this.state;
     const { x, y } = choose;
@@ -106,33 +115,7 @@ class Game extends React.Component {
 
         <div className="Board">
 
-          <Zone name="3">
-            <Cell x={0} y={3} board={board} onCellClick={() => this.onCellClick(0, 3)} />
-            <Cell x={1} y={3} board={board} onCellClick={() => this.onCellClick(1, 3)} />
-            <Cell x={0} y={2} board={board} onCellClick={() => this.onCellClick(0, 2)} />
-            <Cell x={1} y={2} board={board} onCellClick={() => this.onCellClick(1, 2)} />
-          </Zone>
-
-          <Zone name="4">
-            <Cell x={2} y={3} board={board} onCellClick={() => this.onCellClick(2, 3)} />
-            <Cell x={3} y={3} board={board} onCellClick={() => this.onCellClick(3, 3)} />
-            <Cell x={2} y={2} board={board} onCellClick={() => this.onCellClick(2, 2)} />
-            <Cell x={3} y={2} board={board} onCellClick={() => this.onCellClick(3, 2)} />
-          </Zone>
-
-          <Zone name="1">
-            <Cell x={0} y={1} board={board} onCellClick={() => this.onCellClick(0, 1)} />
-            <Cell x={1} y={1} board={board} onCellClick={() => this.onCellClick(1, 1)} />
-            <Cell x={0} y={0} board={board} onCellClick={() => this.onCellClick(0, 0)} />
-            <Cell x={1} y={0} board={board} onCellClick={() => this.onCellClick(1, 0)} />
-          </Zone>
-
-          <Zone name="2">
-            <Cell x={2} y={1} board={board} onCellClick={() => this.onCellClick(2, 1)} />
-            <Cell x={3} y={1} board={board} onCellClick={() => this.onCellClick(3, 1)} />
-            <Cell x={2} y={0} board={board} onCellClick={() => this.onCellClick(2, 0)} />
-            <Cell x={3} y={0} board={board} onCellClick={() => this.onCellClick(3, 0)} />
-          </Zone>
+        {this.renderGrid(board)}
 
         </div>
 
