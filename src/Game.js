@@ -18,7 +18,7 @@ import {
 import './Game.css';
 
 const IA_DEPTH_HARD = 5;
-const IA_DEPTH_MEDIUM = 3;
+const IA_DEPTH_MEDIUM = 4;
 const IA_DEPTH_EASY = 2;
 
 export const getDefaultState = () => ({

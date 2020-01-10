@@ -5,6 +5,26 @@ import Player from './Player'
 export const isPieceAllowed = (board, x, y, piece, color) => {
   let i, j;
 
+  // check zone
+  const zone = getZone(x, y);
+
+  for (i = 0; i <= 3; i++) {
+    for (j = 0; j <= 3; j++) {
+      if (board[x][j] && board[x][j].piece === piece && board[x][j].color !== color)
+        return false;
+      if (board[i][y] && board[i][y].piece === piece && board[i][y].color !== color)
+        return false;
+      if (board[i][j] && getZone(i, j) === zone && board[i][j].piece === piece && board[i][j].color !== color)
+        return false;
+    }
+  }
+
+  return true;
+}
+
+export const isPieceAllowedOld = (board, x, y, piece, color) => {
+  let i, j;
+
   // check row
   for (i = 0; i <= 3; i++)
     if (board[i][y] && board[i][y].piece === piece && board[i][y].color !== color)
@@ -116,7 +136,7 @@ export const cloneBoard = board => {
     board[1].slice(),
     board[2].slice(),
     board[3].slice()
-  ]
+  ];
 }
 
 export const clonePlayer = player => {
@@ -126,7 +146,7 @@ export const clonePlayer = player => {
   return newPlayer;
 }
 
-export const removePlayerPiece = (player, piece) => {
+export const removePlayerPieceOld = (player, piece) => {
   let index;
 
   for (let i = 0; i < player.pieces.length; i++) {
@@ -139,11 +159,14 @@ export const removePlayerPiece = (player, piece) => {
   player.pieces.splice(index, 1);
 }
 
+export const removePlayerPiece = (player, piece) => {
+  player.pieces.splice(player.pieces.findIndex(p => p === piece), 1);
+}
+
 export const doMove = (board, player, piece, x, y) => {
   board[x][y] = { piece, color: player.color };
   removePlayerPiece(player, piece);
-};
-
+}
 
 window.doMove = doMove;
 window.players = [

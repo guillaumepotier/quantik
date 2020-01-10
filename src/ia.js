@@ -73,9 +73,6 @@ export const playv2 = (state, depth, debug) => {
   // first move is not important, do not make many iterations
   if (state.players[1].pieces.length === 8)
     depth = 0;
-  // for second move, reduce depth by half not very important too
-  if (state.players[1].pieces.length === 7 && depth > 0)
-    depth = Math.round(depth/2);
 
   for (let i = 0; i < situations.length; i++) {
     const situation = situations[i];

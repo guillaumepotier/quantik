@@ -17,8 +17,11 @@ import {
   hasWon,
   hasWonOld,
   removePlayerPiece,
+  removePlayerPieceOld,
   doMove,
-  cloneBoard
+  cloneBoard,
+  isPieceAllowed,
+  isPieceAllowedOld
 } from './tools'
 
 import Player from './Player';
@@ -330,5 +333,30 @@ test('hasWon perf', () => {
     hasWonOld(board);
   stop = new Date();
   console.log(`hasWonOld took ${stop-start}ms to execute`);
+
+  start = new Date();
+  for (let i = 0; i <= 100000; i++)
+    removePlayerPiece(new Player('white'), 'triangle');
+  stop = new Date();
+  console.log(`removePlayerPiece took ${stop-start}ms to execute`);
+
+  start = new Date();
+  for (let i = 0; i <= 100000; i++)
+    removePlayerPieceOld(new Player('white'), 'triangle');
+  stop = new Date();
+  console.log(`removePlayerPieceOld took ${stop-start}ms to execute`);
+
+  start = new Date();
+  for (let i = 0; i <= 100000; i++)
+    isPieceAllowedOld(board, 3, 3, 'square', 'black')
+  stop = new Date();
+  console.log(`isPieceAllowed took ${stop-start}ms to execute`);
+
+  start = new Date();
+  for (let i = 0; i <= 100000; i++)
+    isPieceAllowedOld(board, 3, 3, 'square', 'black')
+  stop = new Date();
+  console.log(`isPieceAllowedOld took ${stop-start}ms to execute`);
+
 
 });
