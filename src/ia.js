@@ -146,35 +146,41 @@ export const play = (state, depth) => {
   return state;
 }
 
-export const maxMinmaxv2 = (situations, depth, players, isIA) => {
+export const maxMinmaxv2 = (situations, depth) => {
   let best = false;
   let bestSituation;
 
   for (let i = 0; i < situations.length; i++) {
     const currentSituation = situations[i];
-    const value = minmaxv2(currentSituation.board, depth, currentSituation.players, isIA);
+    const value = minmaxv2(currentSituation.board, depth, currentSituation.players, true);
 
     if (best === false || value > best || (value === best && Math.random() < 0.1)) {
       best = value;
       bestSituation = currentSituation;
     }
+
+    if (best >= WEIGHT - 8)
+      break;
   }
 
   return { best, bestSituation };
 }
 
-export const minMinmaxv2 = (situations, depth, players, isIA) => {
+export const minMinmaxv2 = (situations, depth) => {
   let best = false;
   let bestSituation;
 
   for (let i = 0; i < situations.length; i++) {
     const currentSituation = situations[i];
-    const value = minmaxv2(currentSituation.board, depth, currentSituation.players, isIA);
+    const value = minmaxv2(currentSituation.board, depth, currentSituation.players, false);
 
     if (best === false || value < best || (value === best && Math.random() < 0.1)) {
       best = value;
       bestSituation = currentSituation;
     }
+
+    if (best <= - WEIGHT + 8)
+      break;
   }
 
   return { best, bestSituation };
@@ -192,11 +198,11 @@ export const minmaxv2 = (board, depth, players, isIA) => {
   // return best;
 
   if (isIA) {
-    const { best, bestSituation } = minMinmaxv2(situations, depth - 1, players, false);
+    const { best, bestSituation } = minMinmaxv2(situations, depth - 1);
     // console.log('>>>> isIA best', best, bestSituation)
     return best;
   } else {
-    const { best, bestSituation } = maxMinmaxv2(situations, depth - 1, players, true);
+    const { best, bestSituation } = maxMinmaxv2(situations, depth - 1);
     // console.log('isPlayer best', best, bestSituation)
     return best;
   }
@@ -214,8 +220,7 @@ export const evaluate = (board, players, isIA) => {
   const player = players[isIA ? 1 : 0];
 
   if (!finished) {
-    const malus = player.pieces.length >= 5 && uniq(player.pieces).length < 4;
-    return (isIA ? 1 : -1) * (malus ? MALUS : 100);
+    return 100;
   }
 
   if (isIA) {

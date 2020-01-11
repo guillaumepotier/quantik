@@ -1,3 +1,6 @@
+.Piece {
+}
+
 .Choice .Piece {
   display: inline-block;
   margin: 5px;
@@ -12,7 +15,6 @@
 .Piece--square {
   height: 40px;
   width: 40px;
-  border: 1px solid #ccc;
 }
 
 .Piece--triangle {

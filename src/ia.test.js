@@ -7,7 +7,6 @@ import {
   minmaxv2,
   evaluate,
   WEIGHT,
-  MALUS,
   getAvailableSituations,
   maxMinmaxv2,
   minMinmaxv2
@@ -80,7 +79,7 @@ test('evaluate non winning matches malus', () => {
   doMove(board, players[0], 'circle', 0, 2);
   doMove(board, players[1], 'triangle', 3, 3);
   // console.log(board, players[1].pieces);
-  expect(evaluate(board, players, true)).toBe(MALUS);
+  expect(evaluate(board, players, true)).toBe(100);
 });
 
 test('basic ia 0 depth', () => {

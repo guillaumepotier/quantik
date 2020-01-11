@@ -6,9 +6,11 @@ import { getZone } from './tools'
 
 import './Cell.css';
 
-function Cell({x, y, board, onCellClick }) {
+function Cell({x, y, board, onCellClick, chosen }) {
+  const isChosen = x === chosen.x && y === chosen.y;
+
   return (
-    <div className={`Cell CellX--${x} CellY--${y} CellZone--${getZone(x, y)}`} onClick={onCellClick}>
+    <div className={`Cell CellX--${x} CellY--${y} CellZone--${getZone(x, y)} Cell--${isChosen ? 'chosen' : 'notChosen'}`} onClick={onCellClick}>
       {board && board[x][y] &&
         <Piece type={board[x][y].piece} color={board[x][y].color} />
       }

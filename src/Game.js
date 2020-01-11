@@ -1,5 +1,7 @@
 import React from 'react';
 
+import uniq from 'lodash/uniq'
+
 import Cell from './Cell';
 import Piece from './Piece';
 
@@ -33,7 +35,7 @@ export const getDefaultState = () => ({
     new Player('black')
   ],
   turn: 0,
-  choose: false,
+  chosen: false,
   iaComputing: false,
   needRestart: false
 });
@@ -53,12 +55,12 @@ class Game extends React.Component {
     if (this.state.board[x][y] || this.state.needRestart)
       return;
 
-    this.setState({ choose: {x, y} });
+    this.setState({ chosen: {x, y} });
   }
 
   onPieceClick (piece, i) {
-    let { choose, turn, players, board } = this.state;
-    const { x, y } = choose;
+    let { chosen, turn, players, board } = this.state;
+    const { x, y } = chosen;
     let currentPlayer = players[turn%2];
 
     doMove(board, currentPlayer, piece, x, y);
@@ -66,14 +68,14 @@ class Game extends React.Component {
     if (hasWon(board)) {
       alert(`Congrats player ${currentPlayer.color}!`);
       // this.setState(getDefaultState());
-      this.setState({ needRestart: true, choose: false });
+      this.setState({ needRestart: true, chosen: false });
       return;
     }
 
     this.setState({
       board,
       turn: turn + 1,
-      choose: false
+      chosen: false
     }, () => {
       if (this.state.withIA) {
         this.setState({ iaComputing: true });
@@ -96,7 +98,7 @@ class Game extends React.Component {
     }, () => {
       if (hasWon(this.state.board)) {
         alert(`Congrats IA!`);
-        this.setState({ needRestart: true, choose: false });
+        this.setState({ needRestart: true, chosen: false });
       }
     });
   }
@@ -106,18 +108,19 @@ class Game extends React.Component {
 
     for (let i = 0; i <= 3; i++)
       for (let j = 0; j <= 3; j++)
-        cells.push(<Cell key={`${i}:${j}`} x={i} y={j} board={board} onCellClick={() => this.onCellClick(i, j)} />)
+        cells.push(<Cell chosen={this.state.chosen} key={`${i}:${j}`} x={i} y={j} board={board} onCellClick={() => this.onCellClick(i, j)} />)
 
     return cells;
   }
 
   render () {
-    const { board, players, turn, choose } = this.state;
-    const { x, y } = choose;
+    const { board, players, turn, chosen } = this.state;
+    const { x, y } = chosen;
     const currentPlayer = players[turn%2];
 
     return (
       <div className="Game">
+
 
         <div className="Board">
 
@@ -158,12 +161,12 @@ class Game extends React.Component {
           }
 
           <div className="Choice">
-            {choose &&
+            {chosen &&
               <div>
                 <div>Choose</div>
-                <div onClick={() => this.setState({ choose: false })}>X</div>
+                <div onClick={() => this.setState({ chosen: false })}>X</div>
                 <div>
-                  {currentPlayer.pieces.map((piece, i) => {
+                  {uniq(currentPlayer.pieces).map((piece, i) => {
                     if (!isPieceAllowed(board, x, y, piece, currentPlayer.color))
                       return false;
                     return <Piece key={i} color={currentPlayer.color} type={piece} allowed={true} onPieceClick={() => this.onPieceClick(piece, i) } />

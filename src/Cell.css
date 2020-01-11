@@ -3,11 +3,20 @@
   align-items: center;
   justify-content: center;
   position: absolute;
+  box-sizing: border-box;
   width: 60px;
   height: 60px;
-  border: 1px solid black;
+  border: 1px solid #ccc;
+  cursor: pointer;
 }
-
+.Cell--chosen.CellZone--0,
+.Cell--chosen.CellZone--3 {
+  border: 2px solid #2f99ba;
+}
+.Cell--chosen.CellZone--1,
+.Cell--chosen.CellZone--2 {
+  border: 2px solid #2485a7;
+}
 .CellY--0 {
   left: 0;
 }
@@ -32,16 +41,19 @@
 .CellX--3 {
   top: 180px;
 }
-
 .CellZone--0 {
-  background-color: #FFFFCC;
+  background: url('images/binding-light.png') repeat;
+  background-color: #ebeeef;
 }
 .CellZone--1 {
-  background-color: #CCFF99;
+  background: url('images/black-linen-2.png') repeat;
+  background-color: #f7f7f7;
 }
 .CellZone--2 {
-  background-color: #CCFFCC;
+  background: url('images/black-linen-2.png') repeat;
+  background-color: #ebeeef;
 }
 .CellZone--3 {
-  background-color: #FFFF99;
+  background: url('images/binding-light.png') repeat;
+  background-color: #ebeeef;
 }
