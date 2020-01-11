@@ -37,6 +37,14 @@ test('hasWon test', () => {
     [{ piece: 'cross', color: 'white' }, false, false, false]
   ];
   expect(hasWon(board)).toBe(true);
+
+  board = [
+    [false, { piece: 'circle', color: 'black' }, { piece: 'triangle', color: 'white' }, false],
+    [{ piece: 'cross', color: 'white' }, { piece: 'triangle', color: 'white' }, { piece: 'circle', color: 'white' }, { piece: 'square', color: 'black' }],
+    [false, { piece: 'square', color: 'white' }, false, false],
+    [false, { piece: 'circle', color: 'black' }, false, { piece: 'triangle', color: 'black' }]
+  ];
+  expect(hasWon(board)).toBe(true);
 });
 
 test('isPieceAllowed', () => {

@@ -1,4 +1,7 @@
 .Piece {
+  width: 40px;
+  height: 40px;
+  background-size: contain;
 }
 
 .Choice .Piece {
@@ -12,11 +15,40 @@
   cursor: not-allowed;
 }
 
-.Piece--square {
-  height: 40px;
-  width: 40px;
+.Piece--square.Piece--black {
+  background: url('images/pieces/square_black.svg') no-repeat;
+  background-size: contain;
+}
+.Piece--circle.Piece--black {
+  background: url('images/pieces/circle_black.svg') no-repeat;
+  background-size: contain;
+}
+.Piece--triangle.Piece--black {
+  background: url('images/pieces/triangle_black.svg') no-repeat;
+  background-size: contain;
+}
+.Piece--cross.Piece--black {
+  background: url('images/pieces/cross_black.svg') no-repeat;
+  background-size: contain;
+}
+.Piece--square.Piece--white {
+  background: url('images/pieces/square_white.svg') no-repeat;
+  background-size: contain;
+}
+.Piece--circle.Piece--white {
+  background: url('images/pieces/circle_white.svg') no-repeat;
+  background-size: contain;
+}
+.Piece--triangle.Piece--white {
+  background: url('images/pieces/triangle_white.svg') no-repeat;
+  background-size: contain;
+}
+.Piece--cross.Piece--white {
+  background: url('images/pieces/cross_white.svg') no-repeat;
+  background-size: contain;
 }
 
+/*
 .Piece--triangle {
   width: 0;
   height: 0;
@@ -49,9 +81,10 @@
 }
 
 .Piece--white:not(.Piece--triangle):not(.Piece--cross) {
-  background: #ccc;
+  color: #ccc;
 }
 
 .Piece--black:not(.Piece--triangle):not(.Piece--cross) {
-  background: black;
+  color: black;
 }
+*/

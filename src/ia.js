@@ -5,6 +5,7 @@ import {
   clonePlayer,
   hasWon,
   doMove,
+  undoMove,
   isPieceAllowed
 } from './tools'
 
@@ -14,15 +15,24 @@ export const MALUS = 69;
 export const DEBUG = true;
 window.evaluatedMoves = 0;
 
-export const getAvailableSituations = (board, players, isIA) => {
+export const getAvailableSituations = (board, players, isIA, turn2) => {
   const situations = [];
   const currentPlayer = players[isIA ? 1 : 0];
   const pieces = uniq(currentPlayer.pieces);
+
+  // const situationPlayers = [
+  //   clonePlayer(players[0]),
+  //   clonePlayer(players[1])
+  // ];
 
   for (let i = 0; i <= 3; i++) {
     for (let j = 0; j <= 3; j++) {
       // if already a piece on this case, not playable
       if (board[i][j])
+        continue;
+
+      // on turn 2, consider only corners
+      if (turn2 && (i === 1 || i === 2 || j === 1 || j === 2))
         continue;
 
       for (let p = 0; p < pieces.length; p++) {
@@ -31,24 +41,20 @@ export const getAvailableSituations = (board, players, isIA) => {
         if (!isPieceAllowed(board, i, j, piece, currentPlayer.color))
           continue;
 
-        const situationPlayers = [
-          clonePlayer(players[0]),
-          clonePlayer(players[1])
-        ];
-
         // clone situation.board and situation.player to modify them
-        const situationBoard = cloneBoard(board);
-        const situationPlayer = situationPlayers[isIA ? 1 : 0];
+        // const situationBoard = cloneBoard(board);
+        // situationPlayers[isIA ? 1 : 0] = clonePlayer(players[isIA ? 1 : 0]);
 
-        doMove(situationBoard, situationPlayer, piece, i, j);
+        // const situationPlayer = situationPlayers[isIA ? 1 : 0];
+
+        // doMove(situationBoard, situationPlayer, piece, i, j);
 
         situations.push({
-          board: situationBoard,
-          players: situationPlayers,
+          // board: situationBoard,
+          // players: situationPlayers,
           x: i,
           y: j,
-          piece,
-          color: situationPlayer.color
+          piece
         });
       }
     }
@@ -60,9 +66,9 @@ export const getAvailableSituations = (board, players, isIA) => {
 export const playv2 = (state, depth, debug) => {
   let best = false;
   let bestSituation;
-  const situations = getAvailableSituations(state.board, state.players, true);
+  let situations = getAvailableSituations(state.board, state.players, true);
 
-  if (DEBUG) {
+  if (debug) {
     var debugBoard = [
       [{}, {}, {}, {}],
       [{}, {}, {}, {}],
@@ -74,15 +80,21 @@ export const playv2 = (state, depth, debug) => {
   // first move is not important, do not make many iterations
   if (state.players[1].pieces.length === 8)
     depth = 0;
-  // for second move, reduce depth a bit to avoid wait
-  if (state.players[1].pieces.length === 7 && depth > 0)
-    depth = depth - 1;
+
+  // for second move, only consider playing corners and decr depth
+  if (state.players[1].pieces.length === 7) {
+    depth = Math.max(0, depth - 1);
+    situations = getAvailableSituations(state.board, state.players, true, true);
+  }
 
   for (let i = 0; i < situations.length; i++) {
     const situation = situations[i];
-    const val = minmaxv2(situation.board, depth, situation.players, true);
 
-    if (DEBUG)
+    doMove(state.board, state.players[1], situation.piece, situation.x, situation.y);
+    const val = minmaxv2(state.board, depth, state.players, true);
+    undoMove(state.board, state.players[1], situation.piece, situation.x, situation.y);
+
+    if (debug)
       debugBoard[situation.x][situation.y][situation.piece] = val;
 
     if (best === false || val > best || (val === best && Math.random() < 0.1)) {
@@ -147,13 +159,16 @@ export const play = (state, depth) => {
   return state;
 }
 
-export const maxMinmaxv2 = (situations, depth) => {
+export const maxMinmaxv2 = (situations, depth, board, players) => {
   let best = false;
   let bestSituation;
 
   for (let i = 0; i < situations.length; i++) {
     const currentSituation = situations[i];
-    const value = minmaxv2(currentSituation.board, depth, currentSituation.players, true);
+
+    doMove(board, players[1], currentSituation.piece, currentSituation.x, currentSituation.y);
+    const value = minmaxv2(board, depth, players, true);
+    undoMove(board, players[1], currentSituation.piece, currentSituation.x, currentSituation.y);
 
     if (best === false || value > best || (value === best && Math.random() < 0.1)) {
       best = value;
@@ -167,13 +182,16 @@ export const maxMinmaxv2 = (situations, depth) => {
   return { best, bestSituation };
 }
 
-export const minMinmaxv2 = (situations, depth) => {
+export const minMinmaxv2 = (situations, depth, board, players) => {
   let best = false;
   let bestSituation;
 
   for (let i = 0; i < situations.length; i++) {
     const currentSituation = situations[i];
-    const value = minmaxv2(currentSituation.board, depth, currentSituation.players, false);
+
+    doMove(board, players[0], currentSituation.piece, currentSituation.x, currentSituation.y);
+    const value = minmaxv2(board, depth, players, false);
+    undoMove(board, players[0], currentSituation.piece, currentSituation.x, currentSituation.y);
 
     if (best === false || value < best || (value === best && Math.random() < 0.1)) {
       best = value;
@@ -199,11 +217,11 @@ export const minmaxv2 = (board, depth, players, isIA) => {
   // return best;
 
   if (isIA) {
-    const { best, bestSituation } = minMinmaxv2(situations, depth - 1);
+    const { best, bestSituation } = minMinmaxv2(situations, depth - 1, board, players);
     // console.log('>>>> isIA best', best, bestSituation)
     return best;
   } else {
-    const { best, bestSituation } = maxMinmaxv2(situations, depth - 1);
+    const { best, bestSituation } = maxMinmaxv2(situations, depth - 1, board, players);
     // console.log('isPlayer best', best, bestSituation)
     return best;
   }

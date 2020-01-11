@@ -7,6 +7,7 @@ class Player {
       'circle', 'circle',
       'cross', 'cross'
     ];
+    this.lastPlay = false;
   }
 }
 

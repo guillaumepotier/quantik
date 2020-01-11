@@ -70,6 +70,10 @@ export const hasWon = board => {
   for (i = 0; i <= 3; i++) {
     for (j = 0; j <= 3; j++) {
       const piece = board[i][j].piece;
+
+      if (!board[i][j])
+        continue;
+
       rows[i].push(piece);
       cols[j].push(piece);
       zones[getZone(i, j)].push(piece);
@@ -77,6 +81,9 @@ export const hasWon = board => {
   }
 
   for (let k = 0; k <= 3; k++) {
+    if (rows[k].length !== 4 && cols[k].length !== 4 && zones[k].length !== 4)
+      continue;
+
     if (intersection(rows[k], needed).length === 4)
       return true;
     if (intersection(cols[k], needed).length === 4)
@@ -166,6 +173,33 @@ export const removePlayerPiece = (player, piece) => {
 export const doMove = (board, player, piece, x, y) => {
   board[x][y] = { piece, color: player.color };
   removePlayerPiece(player, piece);
+  player.lastPlay = { piece, x, y };
+}
+
+export const undoMove = (board, player, piece, x, y) => {
+  board[x][y] = false;
+  player.pieces.push(piece);
+  player.lastPlay = false;
+}
+
+export const humanizeInt = int => {
+  if (int <= 1000)
+    return int;
+  if (int <= 1000000)
+    return `${Math.floor(int/1000)}k+`;
+
+  const M = Math.floor(int/1000000);
+  const k = Math.floor((int-M*1000000)/100000);
+  return `${M},${k}M+`;
+}
+
+export const humanizeMs = ms => {
+  if (ms <= 1000)
+    return `${ms}ms`;
+
+  const S = Math.floor(ms/1000);
+  const s = Math.floor((ms - S*1000)/100);
+  return `${S},${s}s`;
 }
 
 window.doMove = doMove;

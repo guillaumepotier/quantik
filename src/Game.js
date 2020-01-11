@@ -10,7 +10,9 @@ import Player from './Player';
 import {
   hasWon,
   doMove,
-  isPieceAllowed
+  isPieceAllowed,
+  humanizeInt,
+  humanizeMs
 } from './tools';
 
 import {
@@ -97,7 +99,7 @@ class Game extends React.Component {
 
     this.setState({
       ...newState,
-      iaLog: `IA evaluated ${window.evaluatedMoves} possible moves in ${end-start}ms.`,
+      iaLog: `IA evaluated ${humanizeInt(window.evaluatedMoves)} possible moves in ${humanizeMs(end-start)}.`,
       turn: this.state.turn + 1,
       iaComputing: false
     }, () => {

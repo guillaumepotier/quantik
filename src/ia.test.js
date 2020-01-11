@@ -19,6 +19,7 @@ import {
   removePlayerPieceOld,
   doMove,
   cloneBoard,
+  clonePlayer,
   isPieceAllowed,
   isPieceAllowedOld
 } from './tools'
@@ -82,7 +83,7 @@ test('evaluate non winning matches malus', () => {
   expect(evaluate(board, players, true)).toBe(100);
 });
 
-test('basic ia 0 depth', () => {
+test.skip('basic ia 0 depth', () => {
   const state = {
     board : [
       [{ piece: 'square', color: 'white' }, { piece: 'triangle', color: 'black' }, { piece: 'circle', color: 'white' }, false],
@@ -112,22 +113,28 @@ test('getAvailableSituations', () => {
   expect(getAvailableSituations(board, players, false).length).toBe(64);
 
   doMove(board, white, 'triangle', 2, 2);
+
   expect(getAvailableSituations(board, players, false).length).toBe(60);
   expect(getAvailableSituations(board, players, true).length).toBe(53);
+
+  // hack turn 2
+  expect(getAvailableSituations(board, players, true, true).length).toBe(15);
 
   doMove(board, white, 'triangle', 0, 0);
 
   const availableSituations = getAvailableSituations(board, players, false);
   expect(availableSituations.length).toBe(42);
-  expect(availableSituations[0].players[0].pieces.length).toBe(5);
+  // expect(availableSituations[0].players[0].pieces.length).toBe(5);
 
   const availableSituationsWithTriangle = availableSituations.filter(({ piece }) => piece === 'triangle');
   expect(availableSituationsWithTriangle.length).toBe(0);
 
   // console.log('>>> availableSituations', getAvailableSituations(board, players, false)[0].players[0]);
+
+  // hack turn2
 });
 
-test('maxMinmaxv2', () => {
+test.skip('maxMinmaxv2', () => {
   const board = [
     [false, false, false, false],
     [false, false, false, false],
@@ -313,49 +320,95 @@ test.skip('playv2 debug', () => {
   console.log('>> debug2', debug);
 });
 
-test('hasWon perf', () => {
+test('perfs', () => {
   let start, stop;
-  const board = [
-    [{ piece: 'square', color: 'white' }, { piece: 'circle', color: 'white' }, false, false],
-    [{ piece: 'triangle', color: 'black' }, { piece: 'cross', color: 'black' }, false, false],
+  let board = [
+    [false, false, false, false],
+    [false, false, false, false],
     [false, false, false, false],
     [false, false, false, false]
   ];
+  let white = new Player('white');
+  let black = new Player('black');
+  let players = [ white, black ];
+
+  doMove(board, white, 'triangle', 2, 0);
+  doMove(board, black, 'circle', 2, 1);
+  doMove(board, white, 'square', 0, 3);
+
+/*
+
+  // => 35278ms hasWonOld
+  // => 9126ms hasWon before length4 test
+  // => 351ms now \o/
   start = new Date();
-  for (let i = 0; i <= 10000; i++)
+  for (let i = 0; i <= 1000000; i++)
     hasWon(board);
   stop = new Date();
   console.log(`hasWon took ${stop-start}ms to execute`);
 
-  start = new Date();
-  for (let i = 0; i <= 10000; i++)
-    hasWonOld(board);
-  stop = new Date();
-  console.log(`hasWonOld took ${stop-start}ms to execute`);
+  // => 35278ms
+  // start = new Date();
+  // for (let i = 0; i <= 1000000; i++)
+  //   hasWonOld(board);
+  // stop = new Date();
+  // console.log(`hasWonOld took ${stop-start}ms to execute`);
 
   start = new Date();
-  for (let i = 0; i <= 100000; i++)
+  for (let i = 0; i <= 1000000; i++)
     removePlayerPiece(new Player('white'), 'triangle');
   stop = new Date();
   console.log(`removePlayerPiece took ${stop-start}ms to execute`);
 
   start = new Date();
-  for (let i = 0; i <= 100000; i++)
+  for (let i = 0; i <= 1000000; i++)
     removePlayerPieceOld(new Player('white'), 'triangle');
   stop = new Date();
   console.log(`removePlayerPieceOld took ${stop-start}ms to execute`);
 
   start = new Date();
-  for (let i = 0; i <= 100000; i++)
+  for (let i = 0; i <= 1000000; i++)
     isPieceAllowedOld(board, 3, 3, 'square', 'black')
   stop = new Date();
   console.log(`isPieceAllowed took ${stop-start}ms to execute`);
 
   start = new Date();
-  for (let i = 0; i <= 100000; i++)
+  for (let i = 0; i <= 1000000; i++)
     isPieceAllowedOld(board, 3, 3, 'square', 'black')
   stop = new Date();
   console.log(`isPieceAllowedOld took ${stop-start}ms to execute`);
 
+  // 26750ms
+  // 21964ms stoping cloning not playing user
+  start = new Date();
+  let situations;
+  for (let i = 0; i <= 1000000; i++)
+    situations = getAvailableSituations(board, players, true);
+  stop = new Date();
+  console.log(`getAvailableSituations took ${stop-start}ms to execute`);
+
+
+  // 157 ms
+  start = new Date();
+  for (let i = 0; i <= 1000000; i++)
+    cloneBoard(board);
+  stop = new Date();
+  console.log(`cloneBoard took ${stop-start}ms to execute`);
+
+  start = new Date();
+  for (let i = 0; i <= 1000000; i++)
+    clonePlayer(players[0]);
+  stop = new Date();
+  console.log(`clonePlayer took ${stop-start}ms to execute`);
+
+*/
+
+  // => 51615ms
+  // => 45289ms
+  // => 29865ms by forbidding to play same shape
+  // start = new Date();
+  // playv2({ board, players }, 5, true);
+  // stop = new Date();
+  // console.log(`playv2 depth 5 took ${stop-start}ms to execute`);
 
 });
