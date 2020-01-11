@@ -19,9 +19,9 @@ import {
 
 import './Game.css';
 
-const IA_DEPTH_HARD = 5;
-const IA_DEPTH_MEDIUM = 4;
-const IA_DEPTH_EASY = 2;
+const IA_DEPTH_HARD = 6;
+const IA_DEPTH_MEDIUM = 5;
+const IA_DEPTH_EASY = 3;
 
 export const getDefaultState = () => ({
   board: [
@@ -37,6 +37,7 @@ export const getDefaultState = () => ({
   turn: 0,
   chosen: false,
   iaComputing: false,
+  iaLog: false,
   needRestart: false
 });
 
@@ -85,6 +86,9 @@ class Game extends React.Component {
   }
 
   IAPlay () {
+    // todo: make a IA class with this private var
+    window.evaluatedMoves = 0;
+
     const start = new Date();
     const newState = playv2(this.state, this.state.iaLevel);
     const end = new Date();
@@ -93,6 +97,7 @@ class Game extends React.Component {
 
     this.setState({
       ...newState,
+      iaLog: `IA evaluated ${window.evaluatedMoves} possible moves in ${end-start}ms.`,
       turn: this.state.turn + 1,
       iaComputing: false
     }, () => {
@@ -158,6 +163,9 @@ class Game extends React.Component {
 
           {this.state.iaComputing &&
             <div>IA is computing..</div>
+          }
+          {this.state.iaLog && !this.state.iaComputing &&
+            <div>{this.state.iaLog}</div>
           }
 
           <div className="Choice">

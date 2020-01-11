@@ -12,6 +12,7 @@ export const WEIGHT = 1000;
 export const MALUS = 69;
 
 export const DEBUG = true;
+window.evaluatedMoves = 0;
 
 export const getAvailableSituations = (board, players, isIA) => {
   const situations = [];
@@ -213,11 +214,11 @@ export const minmax = (board, depth, players, playerIA, isIA) => {
     return evaluate(board, players, isIA);
 }
 
-
 // todo: won't work, need to fake play turn to have proper player.pieces count
 export const evaluate = (board, players, isIA) => {
   const finished = hasWon(board);
   const player = players[isIA ? 1 : 0];
+  window.evaluatedMoves++;
 
   if (!finished) {
     return 100;
