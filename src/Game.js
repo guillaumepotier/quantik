@@ -51,6 +51,7 @@ class Game extends React.Component {
     this.state = {
       ...getDefaultState(),
       withIA: true,
+      iaFirst: false,
       iaLevel: IA_DEPTH_MEDIUM
     }
   }
@@ -87,6 +88,20 @@ class Game extends React.Component {
         setTimeout(() => this.IAPlay(), 300);
       }
     });
+  }
+
+  onIAFirstChange () {
+    const iaFirst = !this.state.iaFirst;
+    this.setState({ iaFirst });
+
+    if (iaFirst && this.state.turn === 0) {
+      this.iaFirst();
+    }
+  }
+
+  iaFirst () {
+    this.IAPlay();
+    this.setState({ turn: 0 });
   }
 
   IAPlay () {
@@ -164,6 +179,10 @@ class Game extends React.Component {
                 <option value={IA_DEPTH_MEDIUM}>Medium</option>
                 <option value={IA_DEPTH_HARD}>Hard</option>
               </select>
+              IA plays first <input
+                type="checkbox"
+                defaultChecked={this.state.iaFirst}
+                onChange={() => this.onIAFirstChange()} />
             </div>
           }
 
@@ -178,7 +197,12 @@ class Game extends React.Component {
 
           {this.state.needRestart &&
             <button onClick={() => {
-              this.setState(getDefaultState());
+              this.setState({
+                ...this.state,
+                ...getDefaultState()
+              });
+              if (this.state.iaFirst)
+                setTimeout(() => this.iaFirst(), 300);
             }}>New game!</button>
           }
         </div>

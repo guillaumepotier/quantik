@@ -244,7 +244,6 @@ export const minmax = (board, depth, players, playerIA, isIA) => {
 // todo: won't work, need to fake play turn to have proper player.pieces count
 export const evaluate = (board, players, isIA) => {
   const finished = hasWon(board);
-  const player = players[isIA ? 1 : 0];
   window.evaluatedMoves++;
 
   if (!finished) {
