@@ -60,7 +60,7 @@ export const getZone = (x, y) => {
   }
 }
 
-export const hasWon = board => {
+export const hasWon = (board, which) => {
   let i, j;
   const rows = [[], [], [], []];
   const cols = [[], [], [], []];
@@ -84,12 +84,15 @@ export const hasWon = board => {
     if (rows[k].length !== 4 && cols[k].length !== 4 && zones[k].length !== 4)
       continue;
 
-    if (intersection(rows[k], needed).length === 4)
-      return true;
-    if (intersection(cols[k], needed).length === 4)
-      return true;
-    if (intersection(zones[k], needed).length === 4)
-      return true;
+    if (intersection(rows[k], needed).length === 4) {
+      return which ? { what: 'row', where: k } : true;
+    }
+    if (intersection(cols[k], needed).length === 4) {
+      return which ? { what: 'col', where: k } : true;
+    }
+    if (intersection(zones[k], needed).length === 4) {
+      return which ? { what: 'zone', where: k } : true;
+    }
   }
 
   return false;

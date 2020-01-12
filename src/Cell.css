@@ -17,6 +17,9 @@
 .Cell--chosen.CellZone--2 {
   border: 2px solid #2485a7;
 }
+.Cell--winning {
+  background-color: #ffe35f !important;
+}
 .CellY--0 {
   left: 0;
 }

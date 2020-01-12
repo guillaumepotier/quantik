@@ -41,7 +41,8 @@ export const getDefaultState = () => ({
   chosen: false,
   iaComputing: false,
   iaLog: false,
-  needRestart: false
+  needRestart: false,
+  won: false
 });
 
 class Game extends React.Component {
@@ -69,11 +70,12 @@ class Game extends React.Component {
     let currentPlayer = players[turn%2];
 
     doMove(board, currentPlayer, piece, x, y);
+    const won = hasWon(board, true);
 
-    if (hasWon(board)) {
+    if (false !== won) {
       alert(`Congrats player ${currentPlayer.color}!`);
       // this.setState(getDefaultState());
-      this.setState({ needRestart: true, chosen: false });
+      this.setState({ needRestart: true, chosen: false, won });
       return;
     }
 
@@ -126,9 +128,10 @@ class Game extends React.Component {
       turn: this.state.turn + 1,
       iaComputing: false
     }, () => {
-      if (hasWon(this.state.board)) {
+      const won = hasWon(this.state.board, true);
+      if (false !== won) {
         alert(`Congrats IA!`);
-        this.setState({ needRestart: true, chosen: false });
+        this.setState({ needRestart: true, chosen: false, won });
       }
     });
   }
@@ -147,10 +150,11 @@ class Game extends React.Component {
 
   renderGrid (board) {
     const cells = [];
+    const { chosen, won } = this.state;
 
     for (let i = 0; i <= 3; i++)
       for (let j = 0; j <= 3; j++)
-        cells.push(<Cell chosen={this.state.chosen} key={`${i}:${j}`} x={i} y={j} board={board} onCellClick={() => this.onCellClick(i, j)} />)
+        cells.push(<Cell chosen={chosen} won={won} key={`${i}:${j}`} x={i} y={j} board={board} onCellClick={() => this.onCellClick(i, j)} />)
 
     return cells;
   }
