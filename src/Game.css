@@ -20,6 +20,15 @@
   }
 }
 
+.Parameters div,
+.Parameters span {
+  margin-bottom: 10px;
+}
+
+.Parameters {
+  margin: 20px 0px;
+}
+
 .Game {
   display: flex;
 }
@@ -32,4 +41,28 @@
 
 .Controls {
   margin-left: 15px;
+}
+
+.Choice {
+  margin-top: 10px;
+  margin: 10px 20px;
+  border-radius: 6px;
+
+  background: url('images/black-linen-2.png') repeat;
+  background-color: #f7f7f7;
+}
+
+.Choice-pieces {
+  margin-top: 10px;
+}
+
+.Choice-title {
+  display: inline-block;
+  font-weight: 600;
+}
+
+.Close {
+  float: right;
+  cursor: pointer;
+  margin: 5px 10px 0 0;
 }

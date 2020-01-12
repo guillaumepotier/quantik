@@ -65,8 +65,13 @@ export const getAvailableSituations = (board, players, isIA, turn2) => {
 
 export const playv2 = (state, depth, debug) => {
   let best = false;
-  let bestSituation;
+  let bestSituation = false;
   let situations = getAvailableSituations(state.board, state.players, true);
+
+  const players = [
+    clonePlayer(state.players[0]),
+    clonePlayer(state.players[1])
+  ];
 
   if (debug) {
     var debugBoard = [
@@ -90,9 +95,9 @@ export const playv2 = (state, depth, debug) => {
   for (let i = 0; i < situations.length; i++) {
     const situation = situations[i];
 
-    doMove(state.board, state.players[1], situation.piece, situation.x, situation.y);
-    const val = minmaxv2(state.board, depth, state.players, true);
-    undoMove(state.board, state.players[1], situation.piece, situation.x, situation.y);
+    doMove(state.board, players[1], situation.piece, situation.x, situation.y);
+    const val = minmaxv2(state.board, depth, players, true);
+    undoMove(state.board, players[1], situation.piece, situation.x, situation.y);
 
     if (debug)
       debugBoard[situation.x][situation.y][situation.piece] = val;
@@ -102,6 +107,10 @@ export const playv2 = (state, depth, debug) => {
       bestSituation = situation;
     }
   }
+
+  // No more move possible for IA, it losts!
+  if (bestSituation === false)
+    return false;
 
   doMove(state.board, state.players[1], bestSituation.piece, bestSituation.x, bestSituation.y);
 

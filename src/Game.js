@@ -10,6 +10,7 @@ import Player from './Player';
 import {
   hasWon,
   doMove,
+  undoMove,
   isPieceAllowed,
   humanizeInt,
   humanizeMs
@@ -77,6 +78,7 @@ class Game extends React.Component {
 
     this.setState({
       board,
+      players,
       turn: turn + 1,
       chosen: false
     }, () => {
@@ -97,6 +99,12 @@ class Game extends React.Component {
 
     console.log(`IA took ${end-start}ms to play`);
 
+    if (false === newState) {
+      alert(`Congrats white! IA has no move left to play, you won!`);
+      this.setState({ needRestart: true, chosen: false });
+      return;
+    }
+
     this.setState({
       ...newState,
       iaLog: `IA evaluated ${humanizeInt(window.evaluatedMoves)} possible moves in ${humanizeMs(end-start)}.`,
@@ -107,6 +115,18 @@ class Game extends React.Component {
         alert(`Congrats IA!`);
         this.setState({ needRestart: true, chosen: false });
       }
+    });
+  }
+
+  undoMove () {
+    const { board, players, turn } = this.state;
+    undoMove(board, players[1], players[1].lastPlay.piece, players[1].lastPlay.x, players[1].lastPlay.y);
+    undoMove(board, players[0], players[0].lastPlay.piece, players[0].lastPlay.x, players[0].lastPlay.y);
+
+    this.setState({
+      board,
+      players,
+      turn: turn - 2
     });
   }
 
@@ -128,17 +148,13 @@ class Game extends React.Component {
     return (
       <div className="Game">
 
-
-        <div className="Board">
-
-        {this.renderGrid(board)}
-
-        </div>
-
-        <div className="Controls">
+        <div className="Parameters">
           <div className="HumanOrIa">
-            Player vs. Player<input type="radio" name="player2" value="IA" checked={!this.state.withIA} onChange={() => this.setState({ withIA: false })} />
-            Player vs. IA<input type="radio" name="player2" value="human" checked={this.state.withIA} onChange={() => this.setState({ withIA: true })} />
+            <span>Player vs.</span>
+            <span>
+              Player<input type="radio" name="player2" value="IA" checked={!this.state.withIA} onChange={() => this.setState({ withIA: false })} />
+              IA<input type="radio" name="player2" value="human" checked={this.state.withIA} onChange={() => this.setState({ withIA: true })} />
+            </span>
           </div>
           {this.state.withIA &&
             <div className="IALevel">
@@ -152,7 +168,12 @@ class Game extends React.Component {
           }
 
           {!this.state.needRestart &&
-            <div>Player {currentPlayer.color} turn</div>
+            <div>
+              <span>Player {currentPlayer.color} turn</span>
+              {players[0].lastPlay && players[1].lastPlay &&
+                <button onClick={() => this.undoMove()}>Undo previous</button>
+              }
+            </div>
           }
 
           {this.state.needRestart &&
@@ -160,9 +181,15 @@ class Game extends React.Component {
               this.setState(getDefaultState());
             }}>New game!</button>
           }
+        </div>
 
-          <div>--</div>
+        <div className="Board">
 
+        {this.renderGrid(board)}
+
+        </div>
+
+        <div className="Controls">
           {this.state.iaComputing &&
             <div>IA is computing..</div>
           }
@@ -173,9 +200,9 @@ class Game extends React.Component {
           <div className="Choice">
             {chosen &&
               <div>
-                <div>Choose</div>
-                <div onClick={() => this.setState({ chosen: false })}>X</div>
-                <div>
+                <div className="Choice-title">Allowed pieces</div>
+                <div className="Close" onClick={() => this.setState({ chosen: false })}>X</div>
+                <div className="Choice-pieces">
                   {uniq(currentPlayer.pieces).map((piece, i) => {
                     if (!isPieceAllowed(board, x, y, piece, currentPlayer.color))
                       return false;
