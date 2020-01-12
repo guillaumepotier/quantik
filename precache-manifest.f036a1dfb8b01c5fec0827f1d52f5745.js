@@ -1,10 +1,10 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "da63290c71c50135055e8f4b931c6c23",
+    "revision": "db31e09203fb5791bbc262a45b91a850",
     "url": "/quantik/index.html"
   },
   {
-    "revision": "cd95f15e3993a9db237b",
+    "revision": "c6251aed5de021658b00",
     "url": "/quantik/static/css/main.810d90d1.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/quantik/static/js/2.6078e46f.chunk.js.LICENSE"
   },
   {
-    "revision": "cd95f15e3993a9db237b",
-    "url": "/quantik/static/js/main.0abe3c7b.chunk.js"
+    "revision": "c6251aed5de021658b00",
+    "url": "/quantik/static/js/main.d0524c1d.chunk.js"
   },
   {
     "revision": "4f385873f13671e2657b",

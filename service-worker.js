@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/quantik/precache-manifest.b23cac19a8b7a8819884da85d6dcbad3.js"
+  "/quantik/precache-manifest.f036a1dfb8b01c5fec0827f1d52f5745.js"
 );
 
 self.addEventListener('message', (event) => {
