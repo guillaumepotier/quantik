@@ -9,13 +9,13 @@
   border: 1px solid #ccc;
   cursor: pointer;
 }
-.Cell--chosen.CellZone--0,
+/*.Cell--chosen.CellZone--0,
 .Cell--chosen.CellZone--3 {
   border: 2px solid #2f99ba;
-}
-.Cell--chosen.CellZone--1,
-.Cell--chosen.CellZone--2 {
-  border: 2px solid #2485a7;
+}*/
+.Cell--chosen {
+  border: 3px solid #6ab4ce;
+  background-color: #aed7e8 !important;
 }
 .Cell--winning {
   background-color: #ffe35f !important;
@@ -44,19 +44,33 @@
 .CellX--3 {
   top: 180px;
 }
+
+.CellX--0.CellY--3 {
+  border-top-right-radius: 3px;
+}
+.CellX--0.CellY--0 {
+  border-top-left-radius: 3px;
+}
+.CellX--3.CellY--3 {
+  border-bottom-right-radius: 3px;
+}
+.CellX--3.CellY--0 {
+  border-bottom-left-radius: 3px;
+}
+
 .CellZone--0 {
-  background: url('images/binding-light.png') repeat;
+  background: url('images/dark-stripes-light.png') repeat;
   background-color: #ebeeef;
 }
 .CellZone--1 {
-  background: url('images/black-linen-2.png') repeat;
-  background-color: #f7f7f7;
+  background-color: #515f65;
+  background-image: url('images/brushed-alum.png');
 }
 .CellZone--2 {
-  background: url('images/black-linen-2.png') repeat;
-  background-color: #ebeeef;
+  background-color: #515f65;
+  background-image: url('images/brushed-alum.png');
 }
 .CellZone--3 {
-  background: url('images/binding-light.png') repeat;
+  background: url('images/dark-stripes-light.png') repeat;
   background-color: #ebeeef;
 }

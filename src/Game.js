@@ -163,6 +163,7 @@ class Game extends React.Component {
     const { board, players, turn, chosen } = this.state;
     const { x, y } = chosen;
     const currentPlayer = players[turn%2];
+    let allowedPieces = chosen ? uniq(currentPlayer.pieces).filter(piece => isPieceAllowed(board, x, y, piece, currentPlayer.color)) : [];
 
     return (
       <div className="Game">
@@ -231,7 +232,10 @@ class Game extends React.Component {
                 <div className="Choice-title">Allowed pieces</div>
                 <div className="Close" onClick={() => this.setState({ chosen: false })}>X</div>
                 <div className="Choice-pieces">
-                  {uniq(currentPlayer.pieces).map((piece, i) => {
+                  {!allowedPieces.length &&
+                    <span>None! 😰</span>
+                  }
+                  {allowedPieces.map((piece, i) => {
                     if (!isPieceAllowed(board, x, y, piece, currentPlayer.color))
                       return false;
                     return <Piece key={i} color={currentPlayer.color} type={piece} allowed={true} onPieceClick={() => this.onPieceClick(piece, i) } />
