@@ -1,11 +1,11 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "b0ca6d9b2a05be0ef4e881c17b8c2855",
+    "revision": "b9688448de400f7ae03cf4d44764d71f",
     "url": "/quantik/index.html"
   },
   {
-    "revision": "d4a33041cecdcfcfe2fe",
-    "url": "/quantik/static/css/main.303da782.chunk.css"
+    "revision": "70f650e0962e4bd51b68",
+    "url": "/quantik/static/css/main.55fe040c.chunk.css"
   },
   {
     "revision": "3026e607dd00bdb85940",
@@ -16,20 +16,20 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/quantik/static/js/2.6078e46f.chunk.js.LICENSE"
   },
   {
-    "revision": "d4a33041cecdcfcfe2fe",
-    "url": "/quantik/static/js/main.cf5986f3.chunk.js"
+    "revision": "70f650e0962e4bd51b68",
+    "url": "/quantik/static/js/main.1d6e63c6.chunk.js"
   },
   {
     "revision": "4f385873f13671e2657b",
     "url": "/quantik/static/js/runtime-main.f42968d3.js"
   },
   {
-    "revision": "bc7ee61eca79a80b88beeca834e6e4d8",
-    "url": "/quantik/static/media/binding-light.bc7ee61e.png"
-  },
-  {
     "revision": "e325d6df15337bd368cebf67323ef1a4",
     "url": "/quantik/static/media/black-linen-2.e325d6df.png"
+  },
+  {
+    "revision": "c6842476bd9046768fd18db70510b2f9",
+    "url": "/quantik/static/media/brushed-alum.c6842476.png"
   },
   {
     "revision": "14b7978e2af31135ac995cee7967d4f6",
