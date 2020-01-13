@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "a0680655afd4e841690a601691b2726d",
+    "revision": "1653930fa4e795fb97899cb032011d6a",
     "url": "/quantik/index.html"
   },
   {
