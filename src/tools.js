@@ -98,6 +98,22 @@ export const hasWon = (board, which) => {
   return false;
 }
 
+export const getEmptyRowsAndColls = board => {
+  const emptyRows = { 0: true, 1: true, 2: true, 3: true };
+  const emptyColls = { 0: true, 1: true, 2: true, 3: true };
+
+  for (let i = 0; i <= 3; i++) {
+    for (let j = 0; j <= 3; j++) {
+      if (board[i][j]) {
+        emptyColls[j] = false;
+        emptyRows[i] = false;
+      }
+    }
+  }
+
+  return { rows: emptyRows, cols: emptyColls };
+}
+
 export const hasWonOld = board => {
   let i, j;
   const needed = ['square', 'triangle', 'circle', 'cross'];

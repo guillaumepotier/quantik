@@ -13,9 +13,9 @@ function Cell({x, y, board, onCellClick, chosen, won }) {
 
   if (won) {
     if (
-        won.what === 'row' && won.where === x ||
-        won.what === 'col' && won.where === y ||
-        won.what === 'zone' && won.where === zone
+        (won.what === 'row' && won.where === x) ||
+        (won.what === 'col' && won.where === y) ||
+        (won.what === 'zone' && won.where === zone)
       ) {
       isWinningCell = true;
     }

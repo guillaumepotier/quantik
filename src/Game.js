@@ -18,7 +18,7 @@ import {
 } from './tools';
 
 import {
-  playv2
+  IA
 } from './ia'
 
 import './Game.css';
@@ -26,6 +26,8 @@ import './Game.css';
 const IA_DEPTH_HARD = 6;
 const IA_DEPTH_MEDIUM = 5;
 const IA_DEPTH_EASY = 3;
+
+const ia = new IA();
 
 export const getDefaultState = () => ({
   board: [
@@ -112,11 +114,10 @@ class Game extends React.Component {
 
   IAPlay () {
     // todo: make a IA class with this private var
-    window.evaluatedMoves = 0;
     const { iaLevel } = this.state;
 
     const start = new Date();
-    const newState = playv2(this.state, this.state.iaLevel);
+    const newState = ia.play(this.state, this.state.iaLevel);
     const end = new Date();
 
     console.log(`IA took ${end-start}ms to play`);
@@ -130,7 +131,7 @@ class Game extends React.Component {
 
     this.setState({
       ...newState,
-      iaLog: `IA evaluated ${humanizeInt(window.evaluatedMoves)} possible moves in ${humanizeMs(end-start)}.`,
+      iaLog: `IA evaluated ${humanizeInt(ia.evaluatedMoves)} possible moves in ${humanizeMs(end-start)}.`,
       turn: this.state.turn + 1,
       iaComputing: false
     }, () => {
@@ -240,7 +241,7 @@ class Game extends React.Component {
                 <div className="Close" onClick={() => this.setState({ chosen: false })}>X</div>
                 <div className="Choice-pieces">
                   {!allowedPieces.length &&
-                    <span>None! 😰</span>
+                    <span>None! <span role="img" aria-label="sad">😰</span></span>
                   }
                   {allowedPieces.map((piece, i) => {
                     if (!isPieceAllowed(board, x, y, piece, currentPlayer.color))
@@ -253,7 +254,7 @@ class Game extends React.Component {
           </div>
         </div>
 
-        <div className="Version">v0.4.0</div>
+        <div className="Version">v0.5.0</div>
       </div>
     );
   }

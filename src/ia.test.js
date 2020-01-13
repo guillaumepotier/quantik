@@ -1,7 +1,7 @@
 import remove from 'lodash/remove'
 
 import {
-  play,
+  IA,
   playv2,
   minmax,
   minmaxv2,
@@ -31,6 +31,8 @@ const PLAYERS = [
   new Player('black')
 ];
 
+const ia = new IA();
+
 test('evaluate winning matches for IA', () => {
   let board = [
     [{ piece: 'square', color: 'white' }, { piece: 'triangle', color: 'black' }, { piece: 'circle', color: 'white' }, { piece: 'cross', color: 'black' }],
@@ -38,7 +40,7 @@ test('evaluate winning matches for IA', () => {
     [false, false, false, false],
     [false, false, false, false]
   ];
-  expect(evaluate(board, PLAYERS, true)).toBe(WEIGHT - PLAYERS[1].pieces.length);
+  expect(ia.evaluate(board, PLAYERS, true)).toBe(WEIGHT - PLAYERS[1].pieces.length);
 
   board = [
     [{ piece: 'square', color: 'white' }, false, false, false],
@@ -46,7 +48,7 @@ test('evaluate winning matches for IA', () => {
     [{ piece: 'circle', color: 'white' }, false, false, false],
     [{ piece: 'cross', color: 'black' }, false, false, false]
   ];
-  expect(evaluate(board, PLAYERS, true)).toBe(WEIGHT - PLAYERS[1].pieces.length);
+  expect(ia.evaluate(board, PLAYERS, true)).toBe(WEIGHT - PLAYERS[1].pieces.length);
 
   board = [
     [{ piece: 'square', color: 'white' }, { piece: 'circle', color: 'white' }, false, false],
@@ -54,50 +56,7 @@ test('evaluate winning matches for IA', () => {
     [false, false, false, false],
     [false, false, false, false]
   ];
-  expect(evaluate(board, PLAYERS, true)).toBe(WEIGHT - PLAYERS[1].pieces.length);
-});
-
-test('evaluate non winning matches malus', () => {
-  let board = [
-    [{ piece: 'square', color: 'white' }, { piece: 'triangle', color: 'black' }, { piece: 'circle', color: 'white' }, false],
-    [{ piece: 'cross', color: 'black' }, false, false, false],
-    [false, false, false, false],
-    [false, false, false, false]
-  ];
-  expect(evaluate(board, PLAYERS, true)).toBe(100);
-
-  board = [
-    [false, false, false, false],
-    [false, false, false, false],
-    [false, false, false, false],
-    [false, false, false, false]
-  ];
-
-  // malus cuz' we used already two of the same pieces
-  const players = [ new Player('white'), new Player('black') ];
-  doMove(board, players[0], 'square', 0, 0);
-  doMove(board, players[1], 'triangle', 0, 1);
-  doMove(board, players[0], 'circle', 0, 2);
-  doMove(board, players[1], 'triangle', 3, 3);
-  // console.log(board, players[1].pieces);
-  expect(evaluate(board, players, true)).toBe(100);
-});
-
-test.skip('basic ia 0 depth', () => {
-  const state = {
-    board : [
-      [{ piece: 'square', color: 'white' }, { piece: 'triangle', color: 'black' }, { piece: 'circle', color: 'white' }, false],
-      [false, false, false, false],
-      [false, false, false, false],
-      [false, false, false, false]
-    ],
-    players: [
-      new Player('white'),
-      new Player('black')
-    ]
-  };
-  const newState = play(state, 0);
-  expect(hasWon(newState.board)).toBe(true);
+  expect(ia.evaluate(board, PLAYERS, true)).toBe(WEIGHT - PLAYERS[1].pieces.length);
 });
 
 test('getAvailableSituations', () => {
@@ -110,19 +69,19 @@ test('getAvailableSituations', () => {
   const white = new Player('white');
   const black = new Player('black');
   const players = [ white, black ];
-  expect(getAvailableSituations(board, players, false).length).toBe(64);
+  expect(ia.getAvailableSituations(board, players, false).length).toBe(64);
 
   doMove(board, white, 'triangle', 2, 2);
 
-  expect(getAvailableSituations(board, players, false).length).toBe(60);
-  expect(getAvailableSituations(board, players, true).length).toBe(53);
+  expect(ia.getAvailableSituations(board, players, false).length).toBe(60);
+  expect(ia.getAvailableSituations(board, players, true).length).toBe(53);
 
   // hack turn 2
-  expect(getAvailableSituations(board, players, true, true).length).toBe(15);
+  expect(ia.getAvailableSituations(board, players, true, true).length).toBe(35);
 
   doMove(board, white, 'triangle', 0, 0);
 
-  const availableSituations = getAvailableSituations(board, players, false);
+  const availableSituations = ia.getAvailableSituations(board, players, false);
   expect(availableSituations.length).toBe(42);
   // expect(availableSituations[0].players[0].pieces.length).toBe(5);
 
@@ -134,7 +93,7 @@ test('getAvailableSituations', () => {
   // hack turn2
 });
 
-test.skip('maxMinmaxv2', () => {
+test('max', () => {
   const board = [
     [false, false, false, false],
     [false, false, false, false],
@@ -149,7 +108,7 @@ test.skip('maxMinmaxv2', () => {
   doMove(board, black, 'circle', 0, 1);
   doMove(board, white, 'triangle', 0, 2);
 
-  const availableSituations = getAvailableSituations(board, players, true);
+  const availableSituations = ia.getAvailableSituations(board, players, true);
 
   // const cornerSituations = availableSituations.filter(({ x, y }) => x === 0 && y === 3);
   // console.log('cornerSituations', cornerSituations);
@@ -164,7 +123,7 @@ test.skip('maxMinmaxv2', () => {
   // console.log('maxBestCornerSituations', maxBestCornerSituations.best, maxBestCornerSituations.bestSituation);
 
 
-  const { best, bestSituation } = maxMinmaxv2(availableSituations, 0, players, true);
+  const { best, bestSituation } = ia.max(availableSituations, 0, board, players);
 
   // console.log('>>> bestSituation', best, bestSituation)
 
@@ -174,7 +133,7 @@ test.skip('maxMinmaxv2', () => {
   expect(bestSituation.piece).toBe('cross');
 });
 
-test.skip('minMinmaxv2', () => {
+test('min', () => {
   const board = [
     [false, false, false, false],
     [false, false, false, false],
@@ -190,13 +149,13 @@ test.skip('minMinmaxv2', () => {
   doMove(board, white, 'triangle', 0, 2);
   doMove(board, black, 'cross', 3, 0);
 
-  const availableSituations = getAvailableSituations(board, players, false);
-  const { best, bestSituation } = minMinmaxv2(availableSituations, 0, players, false);
+  const availableSituations = ia.getAvailableSituations(board, players, false);
+  const { best, bestSituation } = ia.min(availableSituations, 0, board, players);
 
   expect(best).toBe(-WEIGHT+white.pieces.length-1);
 });
 
-test('playv2', () => {
+test('play', () => {
   const board = [
     [false, false, false, false],
     [false, false, false, false],
@@ -208,7 +167,7 @@ test('playv2', () => {
   const players = [ white, black ];
   doMove(board, white, 'square', 0, 0);
 
-  let state = playv2({ board, players }, 0);
+  let state = ia.play({ board, players }, 0);
   // console.log(state.board);
 });
 
@@ -320,7 +279,7 @@ test.skip('playv2 debug', () => {
   console.log('>> debug2', debug);
 });
 
-test('perfs', () => {
+test.skip('perfs', () => {
   let start, stop;
   let board = [
     [false, false, false, false],
@@ -412,5 +371,26 @@ test('perfs', () => {
   // playv2({ board, players }, 5, true);
   // stop = new Date();
   // console.log(`playv2 depth 5 took ${stop-start}ms to execute`);
+
+});
+
+test.skip('debug alpha beta pruning', () => {
+  let start, stop;
+  let board = [
+    [false, false, false, false],
+    [false, false, false, false],
+    [false, false, false, false],
+    [false, false, false, false]
+  ];
+  let white = new Player('white');
+  let black = new Player('black');
+  let players = [ white, black ];
+
+  doMove(board, white, 'cross', 0, 3);
+  doMove(board, black, 'square', 0, 1);
+  doMove(board, white, 'triangle', 3, 3);
+
+  const state = ia.play({ board, players }, 5, true);
+  console.log(state);
 
 });
