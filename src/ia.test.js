@@ -406,6 +406,8 @@ test('perfs', () => {
   // => 51615ms
   // => 45289ms
   // => 29865ms by forbidding to play same shape
+  // => 6646ms by forcing to play a corner
+  // => 4174ms by not evaluating hasWon twice
   // start = new Date();
   // playv2({ board, players }, 5, true);
   // stop = new Date();

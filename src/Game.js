@@ -13,7 +13,8 @@ import {
   undoMove,
   isPieceAllowed,
   humanizeInt,
-  humanizeMs
+  humanizeMs,
+  logGameResult
 } from './tools';
 
 import {
@@ -65,7 +66,7 @@ class Game extends React.Component {
   }
 
   onPieceClick (piece, i) {
-    let { chosen, turn, players, board } = this.state;
+    let { chosen, turn, players, board, withIA, iaLevel } = this.state;
     const { x, y } = chosen;
     let currentPlayer = players[turn%2];
 
@@ -74,8 +75,11 @@ class Game extends React.Component {
 
     if (false !== won) {
       alert(`Congrats player ${currentPlayer.color}!`);
-      // this.setState(getDefaultState());
       this.setState({ needRestart: true, chosen: false, won });
+
+      if (withIA)
+        logGameResult(currentPlayer.color === 'white', iaLevel);
+
       return;
     }
 
@@ -85,7 +89,7 @@ class Game extends React.Component {
       turn: turn + 1,
       chosen: false
     }, () => {
-      if (this.state.withIA) {
+      if (withIA) {
         this.setState({ iaComputing: true });
         setTimeout(() => this.IAPlay(), 300);
       }
@@ -109,6 +113,7 @@ class Game extends React.Component {
   IAPlay () {
     // todo: make a IA class with this private var
     window.evaluatedMoves = 0;
+    const { iaLevel } = this.state;
 
     const start = new Date();
     const newState = playv2(this.state, this.state.iaLevel);
@@ -119,6 +124,7 @@ class Game extends React.Component {
     if (false === newState) {
       alert(`Congrats white! IA has no move left to play, you won!`);
       this.setState({ needRestart: true, chosen: false });
+      logGameResult(true, iaLevel);
       return;
     }
 
@@ -130,8 +136,9 @@ class Game extends React.Component {
     }, () => {
       const won = hasWon(this.state.board, true);
       if (false !== won) {
-        alert(`Congrats IA!`);
+        alert(`Congrats IA, you won! Guillaume is proud of you!`);
         this.setState({ needRestart: true, chosen: false, won });
+        logGameResult(false, iaLevel);
       }
     });
   }
@@ -220,10 +227,10 @@ class Game extends React.Component {
 
         <div className="Controls">
           {this.state.iaComputing &&
-            <div>IA is computing..</div>
+            <small>IA is computing..</small>
           }
           {this.state.iaLog && !this.state.iaComputing &&
-            <div>{this.state.iaLog}</div>
+            <small>{this.state.iaLog}</small>
           }
 
           <div className="Choice">
@@ -245,6 +252,8 @@ class Game extends React.Component {
             }
           </div>
         </div>
+
+        <div className="Version">v0.4.0</div>
       </div>
     );
   }

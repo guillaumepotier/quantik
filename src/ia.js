@@ -215,8 +215,10 @@ export const minMinmaxv2 = (situations, depth, board, players) => {
 }
 
 export const minmaxv2 = (board, depth, players, isIA) => {
-  if (depth === 0 || hasWon(board))
-    return evaluate(board, players, isIA);
+  const finished = hasWon(board);
+
+  if (depth === 0 || finished)
+    return evaluate(board, players, isIA, finished);
 
   // get next player situations
   // ie: if we're currently evaluating an ia move, consider player next situations
@@ -242,9 +244,9 @@ export const minmax = (board, depth, players, playerIA, isIA) => {
 }
 
 // todo: won't work, need to fake play turn to have proper player.pieces count
-export const evaluate = (board, players, isIA) => {
-  const finished = hasWon(board);
+export const evaluate = (board, players, isIA, finished) => {
   window.evaluatedMoves++;
+  finished = typeof finished === 'undefined' ? hasWon(board) : finished;
 
   if (!finished) {
     return 100;
