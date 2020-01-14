@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/quantik/static/css/main.c8896080.chunk.css",
-    "main.js": "/quantik/static/js/main.b6ed7aee.chunk.js",
-    "main.js.map": "/quantik/static/js/main.b6ed7aee.chunk.js.map",
+    "main.css": "/quantik/static/css/main.167f92fb.chunk.css",
+    "main.js": "/quantik/static/js/main.4241f3ad.chunk.js",
+    "main.js.map": "/quantik/static/js/main.4241f3ad.chunk.js.map",
     "runtime-main.js": "/quantik/static/js/runtime-main.f42968d3.js",
     "runtime-main.js.map": "/quantik/static/js/runtime-main.f42968d3.js.map",
     "static/js/2.9100dbf8.chunk.js": "/quantik/static/js/2.9100dbf8.chunk.js",
     "static/js/2.9100dbf8.chunk.js.map": "/quantik/static/js/2.9100dbf8.chunk.js.map",
     "index.html": "/quantik/index.html",
-    "precache-manifest.c5e0038b8013f59dcdd0126d5d3088b1.js": "/quantik/precache-manifest.c5e0038b8013f59dcdd0126d5d3088b1.js",
+    "precache-manifest.ba516b3e874dca74ee1ad32e19a381bb.js": "/quantik/precache-manifest.ba516b3e874dca74ee1ad32e19a381bb.js",
     "service-worker.js": "/quantik/service-worker.js",
-    "static/css/main.c8896080.chunk.css.map": "/quantik/static/css/main.c8896080.chunk.css.map",
+    "static/css/main.167f92fb.chunk.css.map": "/quantik/static/css/main.167f92fb.chunk.css.map",
     "static/js/2.9100dbf8.chunk.js.LICENSE": "/quantik/static/js/2.9100dbf8.chunk.js.LICENSE",
     "static/media/Game.css": "/quantik/static/media/black-linen-2.e325d6df.png",
     "static/media/Cell.css": "/quantik/static/media/brushed-alum.c6842476.png",
@@ -19,7 +19,7 @@
   "entrypoints": [
     "static/js/runtime-main.f42968d3.js",
     "static/js/2.9100dbf8.chunk.js",
-    "static/css/main.c8896080.chunk.css",
-    "static/js/main.b6ed7aee.chunk.js"
+    "static/css/main.167f92fb.chunk.css",
+    "static/js/main.4241f3ad.chunk.js"
   ]
 }
