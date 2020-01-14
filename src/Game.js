@@ -225,7 +225,7 @@ class Game extends React.Component {
               </div>
               <div className="StatsCard">
                 <div className="StatsCard-title">Winrate</div>
-                <div className="StatsCard-value">{easy.length !== 0 ? `${Math.round(easy.filter(({ w }) => w === true).length / easy.length)}%` : '--'}</div>
+                <div className="StatsCard-value">{easy.length !== 0 ? `${Math.round(easy.filter(({ w }) => w === true).length / easy.length * 100)}%` : '--'}</div>
               </div>
             </div>
 
@@ -236,7 +236,7 @@ class Game extends React.Component {
               </div>
               <div className="StatsCard">
                 <div className="StatsCard-title">Winrate</div>
-                <div className="StatsCard-value">{medium.length !== 0 ? `${Math.round(medium.filter(({ w }) => w === true).length / medium.length)}%` : '--'}</div>
+                <div className="StatsCard-value">{medium.length !== 0 ? `${Math.round(medium.filter(({ w }) => w === true).length / medium.length * 100)}%` : '--'}</div>
               </div>
             </div>
 
@@ -247,7 +247,7 @@ class Game extends React.Component {
               </div>
               <div className="StatsCard">
                 <div className="StatsCard-title">Winrate</div>
-                <div className="StatsCard-value">{hard.length !== 0 ? `${Math.round(hard.filter(({ w }) => w === true).length / hard.length)}%` : '--'}</div>
+                <div className="StatsCard-value">{hard.length !== 0 ? `${Math.round(hard.filter(({ w }) => w === true).length / hard.length * 100)}%` : '--'}</div>
               </div>
             </div>
 
@@ -334,7 +334,7 @@ class Game extends React.Component {
           </div>
         </div>
 
-        <div className="Version">v0.6.0</div>
+        <div className="Version">v0.6.1</div>
       </div>
     );
   }
