@@ -22,6 +22,29 @@
   }
 }
 
+.Header {
+  display: flex;
+  color: white;
+  font-weight: 600;
+  line-height: 32px;
+  font-style: 32px;
+  padding: 5px 10px;
+  background: url('images/black-linen-2.png') repeat;
+  background-color: #f7f7f7;
+}
+
+.Header-stats,
+.Header-rules,
+.Header-title {
+  display: flex;
+  cursor: pointer;
+}
+
+.Header-title {
+  flex: 1 auto;
+  justify-content: center;
+}
+
 .Parameters div,
 .Parameters span {
   margin-bottom: 10px;
@@ -75,4 +98,54 @@
   right: 5px;
   font-size: 9px;
   color: #ccc;
+}
+
+.Modal {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 42px;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 2;
+  background-color: #222222;
+  padding: 10%;
+}
+
+.StatsCardGroup {
+  display: flex;
+  flex-direction: row;
+  margin-top: 20px;
+}
+
+.StatsCard {
+  display: flex;
+  flex-direction: column;
+  color: #222222;
+  height: 75px;
+  width: 150px;
+  background-color: white;
+  border-radius: 5px;
+}
+
+.StatsCard-title {
+  align-items: center;
+  font-weight: 600;
+  padding: 5px;
+}
+
+.StatsCard-value {
+  display: flex;
+  flex: 1 auto;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 38px;
+}
+
+.StatsCard + .StatsCard {
+  margin-left: 20px;
 }

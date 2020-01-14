@@ -127,7 +127,7 @@ export class IA {
         bestSituation = currentSituation;
       }
 
-      if (best >= WEIGHT - 8)
+      if (best >= WEIGHT - players[1].pieces.length)
         break;
     }
 
@@ -150,7 +150,7 @@ export class IA {
         bestSituation = currentSituation;
       }
 
-      if (best <= - WEIGHT + 8)
+      if (best <= - WEIGHT - players[0].pieces.length)
         break;
     }
 
@@ -171,11 +171,13 @@ export class IA {
     // return best;
 
     if (isIA) {
-      const { best, bestSituation } = this.min(situations, depth - 1, board, players);
+      const { best } = this.min(situations, depth - 1, board, players);
+      // const { best, bestSituation } = this.min(situations, depth - 1, board, players);
       // console.log('>>>> isIA best', best, bestSituation)
       return best;
     } else {
-      const { best, bestSituation } = this.max(situations, depth - 1, board, players);
+      const { best } = this.max(situations, depth - 1, board, players);
+      // const { best, bestSituation } = this.max(situations, depth - 1, board, players);
       // console.log('isPlayer best', best, bestSituation)
       return best;
     }

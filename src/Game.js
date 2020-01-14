@@ -14,7 +14,8 @@ import {
   isPieceAllowed,
   humanizeInt,
   humanizeMs,
-  logGameResult
+  logGameResult,
+  getGameResults
 } from './tools';
 
 import {
@@ -45,7 +46,9 @@ export const getDefaultState = () => ({
   iaComputing: false,
   iaLog: false,
   needRestart: false,
-  won: false
+  won: false,
+  showRules: false,
+  showStats: false
 });
 
 class Game extends React.Component {
@@ -168,13 +171,90 @@ class Game extends React.Component {
   }
 
   render () {
-    const { board, players, turn, chosen } = this.state;
+    const { board, players, turn, chosen, showRules, showStats } = this.state;
     const { x, y } = chosen;
     const currentPlayer = players[turn%2];
     let allowedPieces = chosen ? uniq(currentPlayer.pieces).filter(piece => isPieceAllowed(board, x, y, piece, currentPlayer.color)) : [];
 
+    let gameLogs = [];
+    let easy, medium, hard;
+
+    if (showStats) {
+      gameLogs = getGameResults();
+      console.log(gameLogs);
+
+      easy = gameLogs.filter(({ d }) => d === 3);
+      medium = gameLogs.filter(({ d }) => d === 5);
+      hard = gameLogs.filter(({ d }) => d === 6);
+    }
+
     return (
       <div className="Game">
+
+        <div className="Header">
+          <div className="Header-rules" onClick={() => this.setState({ showRules: true })}><small>Rules</small></div>
+          <div className="Header-title">Quantik</div>
+          <div className="Header-stats" onClick={() => this.setState({ showStats: true })}><small>Stats</small></div>
+        </div>
+
+        {showRules &&
+          <div className="Modal Rules">
+            <p>The object of the game is to be the first player to lay the fourth different shape of a row, column or square area.</p>
+
+            <p>In turn, the players take turns placing one of their pieces on the board. It is forbidden to place a shape in a row, column or area on which the same shape has already been placed by the opponent. You can only double a shape if you have played the previous one yourself.</p>
+
+            <p>The first player who places the fourth different shape in a row, column or area immediately wins the game, regardless of who owns the other pieces in that winning move.</p>
+
+            <p>If a player has no more possible moves, then he has lost.</p>
+
+            <p onClick={() => this.setState({ showRules: false })}>Close</p>
+          </div>
+        }
+
+        {showStats &&
+          <div className="Modal Stats">
+            <div className="StatsCard">
+              <div className="StatsCard-title">Played games</div>
+              <div className="StatsCard-value">{gameLogs.length}</div>
+            </div>
+
+            <div className="StatsCardGroup">
+              <div className="StatsCard">
+                <div className="StatsCard-title">IA Easy plays</div>
+                <div className="StatsCard-value">{easy.length}</div>
+              </div>
+              <div className="StatsCard">
+                <div className="StatsCard-title">Winrate</div>
+                <div className="StatsCard-value">{easy.length !== 0 ? `${Math.round(easy.filter(({ w }) => w === true).length / easy.length)}%` : '--'}</div>
+              </div>
+            </div>
+
+            <div className="StatsCardGroup">
+              <div className="StatsCard">
+                <div className="StatsCard-title">IA Medium plays</div>
+                <div className="StatsCard-value">{medium.length}</div>
+              </div>
+              <div className="StatsCard">
+                <div className="StatsCard-title">Winrate</div>
+                <div className="StatsCard-value">{medium.length !== 0 ? `${Math.round(medium.filter(({ w }) => w === true).length / medium.length)}%` : '--'}</div>
+              </div>
+            </div>
+
+            <div className="StatsCardGroup">
+              <div className="StatsCard">
+                <div className="StatsCard-title">IA Hard plays</div>
+                <div className="StatsCard-value">{hard.length}</div>
+              </div>
+              <div className="StatsCard">
+                <div className="StatsCard-title">Winrate</div>
+                <div className="StatsCard-value">{hard.length !== 0 ? `${Math.round(hard.filter(({ w }) => w === true).length / hard.length)}%` : '--'}</div>
+              </div>
+            </div>
+
+            <p onClick={() => this.setState({ showStats: false })}>Close</p>
+
+          </div>
+        }
 
         <div className="Parameters">
           <div className="HumanOrIa">
@@ -254,7 +334,7 @@ class Game extends React.Component {
           </div>
         </div>
 
-        <div className="Version">v0.5.0</div>
+        <div className="Version">v0.6.0</div>
       </div>
     );
   }

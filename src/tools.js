@@ -227,6 +227,10 @@ export const logGameResult = (hasWon, iaDifficulty) => {
   window.localStorage.setItem('quantik:results', JSON.stringify(history));
 }
 
+export const getGameResults = () => {
+  return JSON.parse(window.localStorage.getItem('quantik:results')) || [];
+}
+
 window.doMove = doMove;
 window.players = [
   new Player('white'),
