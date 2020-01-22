@@ -1,25 +1,11 @@
-@media only screen and (max-width: 400px) {
-  .Game {
-    flex-direction: column;
-  }
-
-  .Board {
-    margin: 15px auto;
-/*    border-radius: 3px;
-    border: 4px solid #ccc;*/
-  }
+.Game {
+  flex-direction: column;
 }
 
-@media only screen and (min-width: 400px) {
-  .Game {
-    flex-direction: row;
-  }
-
-  .Controls,
-  .Board {
-    margin-top: 20px;
-    margin-left: 20px;
-  }
+.Board {
+  margin: 15px auto;
+/*    border-radius: 3px;
+  border: 4px solid #ccc;*/
 }
 
 .Header {
@@ -52,6 +38,12 @@
 
 .Parameters {
   margin: 20px 0px;
+}
+
+.GameContent {
+  min-width: 400px;
+  max-width: 600px;
+  margin: 20px auto;
 }
 
 .Game {
@@ -148,4 +140,9 @@
 
 .StatsCard + .StatsCard {
   margin-left: 20px;
+}
+
+.PlayerTurn,
+[name=ia_level] {
+  margin: 0 10px;
 }

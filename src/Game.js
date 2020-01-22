@@ -58,7 +58,6 @@ class Game extends React.Component {
     this.state = {
       ...getDefaultState(),
       withIA: true,
-      iaFirst: false,
       iaLevel: IA_DEPTH_MEDIUM
     }
   }
@@ -99,15 +98,6 @@ class Game extends React.Component {
         setTimeout(() => this.IAPlay(), 300);
       }
     });
-  }
-
-  onIAFirstChange () {
-    const iaFirst = !this.state.iaFirst;
-    this.setState({ iaFirst });
-
-    if (iaFirst && this.state.turn === 0) {
-      this.iaFirst();
-    }
   }
 
   iaFirst () {
@@ -256,82 +246,85 @@ class Game extends React.Component {
           </div>
         }
 
-        <div className="Parameters">
-          <div className="HumanOrIa">
-            <span>Player vs.</span>
-            <span>
-              Player<input type="radio" name="player2" value="IA" checked={!this.state.withIA} onChange={() => this.setState({ withIA: false })} />
-              IA<input type="radio" name="player2" value="human" checked={this.state.withIA} onChange={() => this.setState({ withIA: true })} />
-            </span>
-          </div>
-          {this.state.withIA &&
-            <div className="IALevel">
-              <label htmlFor="ia_level">IA Difficulty</label>
-              <select id="ia_level" name="ia_level" value={this.state.iaLevel} onChange={event => this.setState({ iaLevel: parseInt(event.target.value, 10) }) }>
-                <option value={IA_DEPTH_EASY}>Easy</option>
-                <option value={IA_DEPTH_MEDIUM}>Medium</option>
-                <option value={IA_DEPTH_HARD}>Hard</option>
-              </select>
-              IA plays first <input
-                type="checkbox"
-                defaultChecked={this.state.iaFirst}
-                onChange={() => this.onIAFirstChange()} />
+        <div className="GameContent">
+          <div className="Parameters">
+            <div className="HumanOrIa">
+              <span>Player vs.</span>
+              <span>
+                Player<input type="radio" name="player2" value="IA" checked={!this.state.withIA} onChange={() => this.setState({ withIA: false })} />
+                IA<input type="radio" name="player2" value="human" checked={this.state.withIA} onChange={() => this.setState({ withIA: true })} />
+              </span>
             </div>
-          }
+            {this.state.withIA &&
+              <div className="IALevel">
+                <label htmlFor="ia_level">IA Difficulty</label>
+                <select id="ia_level" name="ia_level" value={this.state.iaLevel} onChange={event => this.setState({ iaLevel: parseInt(event.target.value, 10) }) }>
+                  <option value={IA_DEPTH_EASY}>Easy</option>
+                  <option value={IA_DEPTH_MEDIUM}>Medium</option>
+                  <option value={IA_DEPTH_HARD}>Hard</option>
+                </select>
 
-          {!this.state.needRestart &&
-            <div>
-              <span>Player {currentPlayer.color} turn</span>
-              {players[0].lastPlay && players[1].lastPlay &&
-                <button onClick={() => this.undoMove()}>Undo previous</button>
-              }
-            </div>
-          }
+                {this.state.turn === 0 &&
+                  <button
+                    onClick={() => this.iaFirst()}>IA plays first</button>
+                }
 
-          {this.state.needRestart &&
-            <button onClick={() => {
-              this.setState({
-                ...this.state,
-                ...getDefaultState()
-              });
-              if (this.state.iaFirst)
-                setTimeout(() => this.iaFirst(), 300);
-            }}>New game!</button>
-          }
-        </div>
-
-        <div className="Board">
-
-        {this.renderGrid(board)}
-
-        </div>
-
-        <div className="Controls">
-          {this.state.iaComputing &&
-            <small>IA is computing..</small>
-          }
-          {this.state.iaLog && !this.state.iaComputing &&
-            <small>{this.state.iaLog}</small>
-          }
-
-          <div className="Choice">
-            {chosen &&
-              <div>
-                <div className="Choice-title">Allowed pieces</div>
-                <div className="Close" onClick={() => this.setState({ chosen: false })}>X</div>
-                <div className="Choice-pieces">
-                  {!allowedPieces.length &&
-                    <span>None! <span role="img" aria-label="sad">😰</span></span>
-                  }
-                  {allowedPieces.map((piece, i) => {
-                    if (!isPieceAllowed(board, x, y, piece, currentPlayer.color))
-                      return false;
-                    return <Piece key={i} color={currentPlayer.color} type={piece} allowed={true} onPieceClick={() => this.onPieceClick(piece, i) } />
-                  })}
-                </div>
               </div>
             }
+
+            {!this.state.needRestart &&
+              <div>
+                <span className="PlayerTurn">Player {currentPlayer.color} turn</span>
+                {players[0].lastPlay && players[1].lastPlay &&
+                  <button onClick={() => this.undoMove()}>Undo previous</button>
+                }
+              </div>
+            }
+
+            {this.state.needRestart &&
+              <button onClick={() => {
+                this.setState({
+                  ...this.state,
+                  ...getDefaultState()
+                });
+              }}>New game!</button>
+            }
           </div>
+
+          <div className="Board">
+
+          {this.renderGrid(board)}
+
+          </div>
+
+          <div className="Controls">
+            {this.state.iaComputing &&
+              <small>IA is computing..</small>
+            }
+            {this.state.iaLog && !this.state.iaComputing &&
+              <small>{this.state.iaLog}</small>
+            }
+
+            <div className="Choice">
+              {chosen &&
+                <div>
+                  <div className="Choice-title">Allowed pieces</div>
+                  <div className="Close" onClick={() => this.setState({ chosen: false })}>X</div>
+                  <div className="Choice-pieces">
+                    {!allowedPieces.length &&
+                      <span>None! <span role="img" aria-label="sad">😰</span></span>
+                    }
+                    {allowedPieces.map((piece, i) => {
+                      if (!isPieceAllowed(board, x, y, piece, currentPlayer.color))
+                        return false;
+                      return <Piece key={i} color={currentPlayer.color} type={piece} allowed={true} onPieceClick={() => this.onPieceClick(piece, i) } />
+                    })}
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+
         </div>
 
         <div className="Version">v0.6.1</div>
