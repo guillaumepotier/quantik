@@ -48,7 +48,8 @@ export const getDefaultState = () => ({
   needRestart: false,
   won: false,
   showRules: false,
-  showStats: false
+  showStats: false,
+  iaFirst: false
 });
 
 class Game extends React.Component {
@@ -82,7 +83,7 @@ class Game extends React.Component {
       this.setState({ needRestart: true, chosen: false, won });
 
       if (withIA)
-        logGameResult(currentPlayer.color === 'white', iaLevel);
+        logGameResult(currentPlayer.color === 'white', iaLevel, this.state.iaFirst);
 
       return;
     }
@@ -102,7 +103,7 @@ class Game extends React.Component {
 
   iaFirst () {
     this.IAPlay();
-    this.setState({ turn: 0 });
+    this.setState({ iaFirst: true, turn: 0 });
   }
 
   IAPlay () {
@@ -118,7 +119,7 @@ class Game extends React.Component {
     if (false === newState) {
       alert(`Congrats white! IA has no move left to play, you won!`);
       this.setState({ needRestart: true, chosen: false });
-      logGameResult(true, iaLevel);
+      logGameResult(true, iaLevel, this.state.iaFirst);
       return;
     }
 
@@ -132,7 +133,7 @@ class Game extends React.Component {
       if (false !== won) {
         alert(`Congrats IA, you won! Guillaume is proud of you!`);
         this.setState({ needRestart: true, chosen: false, won });
-        logGameResult(false, iaLevel);
+        logGameResult(false, iaLevel, this.state.iaFirst);
       }
     });
   }
@@ -158,6 +159,15 @@ class Game extends React.Component {
         cells.push(<Cell chosen={chosen} won={won} key={`${i}:${j}`} x={i} y={j} board={board} onCellClick={() => this.onCellClick(i, j)} />)
 
     return cells;
+  }
+
+  renderPlayerPieces (player) {
+    const pieces = [];
+
+    for (let i = 0; i < player.pieces.length; i++)
+      pieces.push(<span key={i} className="PlayerPiece"><Piece color={player.color} type={player.pieces[i]} /></span>);
+
+    return pieces;
   }
 
   render () {
@@ -297,6 +307,17 @@ class Game extends React.Component {
 
           </div>
 
+          <div className="PlayerPieces">
+            <div className="PlayerPieces-white">
+              <div className="PlayerPieces-whiteLabel">white:</div>
+              <div className="PlayerPieces-draw">{this.renderPlayerPieces(players[0])}</div>
+            </div>
+            <div className="PlayerPieces-black">
+              <div className="PlayerPieces-blackLabel">black:</div>
+              <div className="PlayerPieces-draw">{this.renderPlayerPieces(players[1])}</div>
+            </div>
+          </div>
+
           <div className="Controls">
             {this.state.iaComputing &&
               <small>IA is computing..</small>
@@ -327,7 +348,7 @@ class Game extends React.Component {
 
         </div>
 
-        <div className="Version">v0.6.1</div>
+        <div className="Version">v0.7.0</div>
       </div>
     );
   }

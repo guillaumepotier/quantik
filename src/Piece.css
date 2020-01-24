@@ -4,6 +4,13 @@
   background-size: contain;
 }
 
+.PlayerPiece .Piece {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin: 2px 3px;
+}
+
 .Choice .Piece {
   display: inline-block;
   margin: 5px;

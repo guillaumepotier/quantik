@@ -56,6 +56,30 @@
   height: 240px;
 }
 
+.PlayerPieces {
+  width: 240px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+}
+
+.PlayerPieces-white,
+.PlayerPieces-black {
+  display: flex;
+}
+
+.PlayerPieces-whiteLabel,
+.PlayerPieces-blackLabel {
+  margin-right: 5px;
+}
+
+.PlayerPieces-draw {
+  display: flex;
+  flex: 1 auto;
+  justify-content: flex-end;
+}
+
 .Controls {
   margin-left: 15px;
 }

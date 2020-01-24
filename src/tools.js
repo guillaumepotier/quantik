@@ -221,9 +221,9 @@ export const humanizeMs = ms => {
   return `${S},${s}s`;
 }
 
-export const logGameResult = (hasWon, iaDifficulty) => {
+export const logGameResult = (hasWon, iaDifficulty, iaFirst) => {
   let history = JSON.parse(window.localStorage.getItem('quantik:results')) || [];
-  history.push({ w: hasWon, d: iaDifficulty, t: (new Date()).getTime() });
+  history.push({ w: hasWon, d: iaDifficulty, t: (new Date()).getTime(), f: !iaFirst });
   window.localStorage.setItem('quantik:results', JSON.stringify(history));
 }
 
