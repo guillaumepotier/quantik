@@ -170,6 +170,14 @@ class Game extends React.Component {
     return pieces;
   }
 
+  showAffiliateIFrame () {
+    return <div className="Credentials">
+      <div>QUANTIK is a GIGAMIC original board game.</div>
+      <img src="//ir-fr.amazon-adsystem.com/e/ir?t=guillaumepoti-21&l=am2&o=8&a=B07YN2YRM4" width="1" height="1" border="0" alt="" style={{ border: 'none !important', margin: '0px !important' }} />
+      <div>This project is free and open source, I'm not affiliated in any way with GIGAMIC. If you like the game, please consider buying it by clicking <a target="_blank" href="https://www.amazon.fr/gp/product/B07YN2YRM4/ref=as_li_tl?ie=UTF8&camp=1642&creative=6746&creativeASIN=B07YN2YRM4&linkCode=as2&tag=guillaumepoti-21&linkId=5e4c14952269b4674511f3d6b0282fcb">on this Amazon affiliate link</a>.</div>
+    </div>
+  }
+
   render () {
     const { board, players, turn, chosen, showRules, showStats } = this.state;
     const { x, y } = chosen;
@@ -328,7 +336,7 @@ class Game extends React.Component {
 
             <div className="Choice">
               {chosen &&
-                <div>
+                <div className="ChoiceWrapper">
                   <div className="Choice-title">Allowed pieces</div>
                   <div className="Close" onClick={() => this.setState({ chosen: false })}>X</div>
                   <div className="Choice-pieces">
@@ -348,7 +356,11 @@ class Game extends React.Component {
 
         </div>
 
-        <div className="Version">v0.7.0</div>
+        <div>{this.showAffiliateIFrame()}</div>
+
+        <div className="Version">
+          <a href="https://github.com/guillaumepotier/quantik" target="_blank">Github source</a> - v0.7.0
+        </div>
       </div>
     );
   }

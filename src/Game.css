@@ -81,7 +81,8 @@
 }
 
 .Controls {
-  margin-left: 15px;
+  display: flex;
+  justify-content: center;
 }
 
 .Choice {
@@ -97,6 +98,10 @@
   margin-top: 10px;
 }
 
+.ChoiceWrapper {
+  padding: 10px 12px;
+}
+
 .Choice-title {
   display: inline-block;
   font-weight: 600;
@@ -105,13 +110,17 @@
 .Close {
   float: right;
   cursor: pointer;
-  margin: 5px 10px 0 0;
+  font-weight: 900;
 }
 
 .Version {
   position: absolute;
-  bottom: 5px;
-  right: 5px;
+  bottom: 10px;
+  right: 10px;
+}
+
+.Version,
+.Version a {
   font-size: 9px;
   color: #ccc;
 }
@@ -169,4 +178,14 @@
 .PlayerTurn,
 [name=ia_level] {
   margin: 0 10px;
+}
+
+.Credentials {
+  margin: 0 20px;
+}
+
+.Credentials,
+.Credentials a {
+  font-size: 12px;
+  color: #ccc;
 }

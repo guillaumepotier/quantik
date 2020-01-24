@@ -13,7 +13,7 @@
 
 .Choice .Piece {
   display: inline-block;
-  margin: 5px;
+  margin: 5px 8px;
   cursor: pointer;
 }
 
