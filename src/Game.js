@@ -359,7 +359,7 @@ class Game extends React.Component {
         <div>{this.showAffiliateIFrame()}</div>
 
         <div className="Version">
-          <a href="https://github.com/guillaumepotier/quantik" target="_blank">Github source</a> - v0.7.0
+          <a href="https://github.com/guillaumepotier/quantik" target="_blank">Github source</a> - v0.7.1
         </div>
       </div>
     );

@@ -82,12 +82,13 @@
 
 .Controls {
   display: flex;
+  flex-direction: column;
   justify-content: center;
 }
 
 .Choice {
-  margin-top: 10px;
-  margin: 10px 20px;
+  max-width: 240px;
+  margin: 10px auto;
   border-radius: 6px;
 
   background: url('images/black-linen-2.png') repeat;
